@@ -1,0 +1,29 @@
+# Django
+**/migrations/
+**/__pycache__/
+static/
+media/
+
+# Virtualenv
+venv/
+env/
+.venv/
+
+# Node
+node_modules/
+dist/
+build/
+
+# Templates Django (evita quebrar sintaxe)
+**/templates/**/*.html
+
+# Admin Django
+**/django/contrib/admin/templates/
+
+# Arquivos gerados
+*.min.js
+*.min.css
+
+# IDE
+.vscode/
+.idea/
