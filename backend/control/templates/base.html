@@ -1,26 +1,59 @@
-{% load django_browser_reload %}
-{% django_browser_reload_script %}
-
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}{% endblock %}</title>
+    <title>Painel de Controle</title>
 
     <!-- Tailwindcss -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<body class="bg-stone-900">
-    <header>
-        <div>
-            <div></div>
-        </div>
+<body class="bg-zinc-900 text-gray-300">
+    <header class="w-full bg-zinc-950 flex p-2 items-center justify-between">
+        <h1 class="font-semibold">
+            CinemaProject
+            <span class="font-normal text-gray-500">
+                - Painel de Controle
+            </span>
+        </h1>
+
+        <nav class="text-center space-x-2">
+            <button onclick="loadPage('/control-panel/')"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-blue-800">
+                Ínicio
+            </button>
+
+            <button onclick="loadPage('/users/')"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-blue-800">
+                Usuários
+            </button>
+
+            <button onclick="loadPage('/films/')"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-blue-800">
+                Filmes
+            </button>
+
+            <button onclick="loadPage('/categories/')"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-blue-800">
+                Categorias
+            </button>
+        </nav>
     </header>
-    
-    <main class="">
-        {% block content %}{% endblock %}
+
+    <main id="content">
+        {% include 'control_panel.html' %}
     </main>
 </body>
+<script>
+    // Função para SPA Django + Templates + JS
+    async function loadPage(url) {
+        const res = await fetch(url, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        document.getElementById("content").innerHTML = await res.text()
+    }
+</script>
+
 </html>

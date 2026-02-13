@@ -125,5 +125,7 @@ STATIC_URL = 'static/'
 
 # Cofigurações do projeto
 
+AUTH_USER_MODEL = 'control.CustomUser'
+
 CORS_ALLOW_ALL_ORIGINS = True
 
