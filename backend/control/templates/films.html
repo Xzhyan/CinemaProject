@@ -1,3 +1,31 @@
-<div class="container bg-zinc-700 mx-auto p-2 rounded-b-lg">
-    <h1>Configurações</h1>
+<div class="w-4xl bg-zinc-800 mx-auto p-2 rounded-b-md">
+    <div class="flex flex-col gap-2 text-center items-center">
+        <h1>Adicionar novo Filme</h1>
+
+        <form method="" class="flex flex-col gap-2">
+            {{ form.name }}
+
+            {{ form.description }}
+
+            <div class="flex flex-row flex-wrap gap-4">
+                {% for checkbox in form.category %}
+                    <label class="flex items-center gap-2">
+                        {{ checkbox.tag }}
+                        <span>{{ checkbox.choice_label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+
+            {{ form.duration }}
+
+            {{ form.age_control }}
+
+            {{ form.display }}
+
+            {{ form.thumb_url }}
+
+            {{ form.ticket_url }}
+
+        </form>
+    </div>
 </div>
