@@ -23,20 +23,22 @@ class AddFilmCardForm(forms.ModelForm):
             }),
             'duration': forms.NumberInput(attrs={
                 'class': "bg-zinc-900 outline-none p-2 rounded-sm",
-                'placeholder': "Duração do filme em minutos"
+                'placeholder': "Duração em minutos"
             }),
             'age_control': forms.NumberInput(attrs={
                 'class': "bg-zinc-900 outline-none p-2 rounded-sm",
                 'placeholder': "Classificação Indicativa"
             }),
             'display': forms.Select(attrs={
-                'class': ""
+                'class': "bg-zinc-900 outline-none p-2 rounded-sm"
             }),
             'thumb_url': forms.URLInput(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm"
+                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm",
+                'placeholder': "Link do banner do filme"
             }),
             'ticket_url': forms.URLInput(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm"
+                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm",
+                'placeholder': "Link de compra de ingressos"
             })
         }
 

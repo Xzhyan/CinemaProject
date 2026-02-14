@@ -1,8 +1,9 @@
-<div class="w-4xl bg-zinc-800 mx-auto p-2 rounded-b-md">
-    <div class="flex flex-col gap-2 text-center items-center">
-        <h1>Adicionar novo Filme</h1>
+<div class="w-4xl bg-zinc-800 mx-auto p-2 rounded-b-md space-y-2">
+    <!-- Card para adicionar novo Filme -->
+    <div class="bg-zinc-700 flex flex-col gap-2 text-center items-center rounded-sm p-2">
+        <h1 class="font-semibold">Adicionar novo Filme</h1>
 
-        <form method="" class="flex flex-col gap-2">
+        <form method="" class="flex flex-col gap-2 text-gray-500">
             {{ form.name }}
 
             {{ form.description }}
@@ -16,16 +17,29 @@
                 {% endfor %}
             </div>
 
-            {{ form.duration }}
+            <div class="flex flex-row justify-center gap-4">
+                {{ form.duration }}
 
-            {{ form.age_control }}
+                {{ form.age_control }}
 
-            {{ form.display }}
+                {{ form.display }}
+            </div>
 
-            {{ form.thumb_url }}
+            <div class="flex flex-row justify-center gap-4">
+                {{ form.thumb_url }}
 
-            {{ form.ticket_url }}
+                {{ form.ticket_url }}
+            </div>
 
+            <button type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold">
+                Salvar
+            </button>
         </form>
+    </div>
+
+    <!-- Lista de filmes -->
+    <div class="bg-zinc-700 flex flex-col gap-2 text-center items-center rounded-sm p-2">
+        <h1 class="font-semibold">Adicionar novo Filme</h1>
+
     </div>
 </div>
