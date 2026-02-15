@@ -11,7 +11,25 @@
 </head>
 
 <body class="bg-zinc-900 text-gray-300">
-    <header class="w-full bg-zinc-950 flex p-2 items-center justify-between">
+    <!-- Pop-up de mensagens -->
+    {% if messages %}
+    <div class="fixed top-5 right-5 space-y-2 z-50">
+        {% for msg in messages %}
+        <div class="msg-pop-up w-\[300px\] text-center px-4 py-2 text-lg rounded-md shadow-md transition-opacity duration-500
+            {% if msg.tags == 'success' %}bg-zinc-950 border-2 border-green-600 text-green-600
+            {% elif msg.tags == 'error' %}bg-zinc-950 border-2 border-red-600 text-red-600
+            {% elif msg.tags == 'warning' %}bg-zinc-950 border-2 border-yellow-600 text-yellow-600
+            {% elif msg.tags == 'info' %}bg-zinc-950 border-2 border-blue-600 text-blue-600
+            {% else %}bg-zinc-950 border-2 border-white text-white
+            {% endif %}">
+            {{ msg }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <header class="w-full bg-zinc-950 flex p-4 items-center justify-between shadow-md">
         <h1 class="font-semibold">
             CinemaProject
             <span class="font-normal text-gray-500">
@@ -20,40 +38,70 @@
         </h1>
 
         <nav class="text-center space-x-2">
-            <button onclick="loadPage('/control-panel/')"
-                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-blue-800">
+            <a href="{% url 'control-panel' %}"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
                 Ínicio
-            </button>
+            </a>
 
-            <button onclick="loadPage('/users/')"
-                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-blue-800">
+            <a href="{% url 'users' %}"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
                 Usuários
-            </button>
+            </a>
 
-            <button onclick="loadPage('/films/')"
-                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-blue-800">
+            <a href="{% url 'films' %}"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
                 Filmes
-            </button>
+            </a>
 
-            <button onclick="loadPage('/categories/')"
-                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-blue-800">
+            <a href="{% url 'categories' %}"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
                 Categorias
-            </button>
+            </a>
         </nav>
     </header>
 
-    <main id="content">
-        {% include 'control_panel.html' %}
+    <main>
+        {% block content %}{% endblock %}
     </main>
-</body>
-<script>
-    // Função para SPA Django + Templates + JS
-    async function loadPage(url) {
-        const res = await fetch(url, {
-            headers: { "X-Requested-With": "XMLHttpRequest" }
-        })
-        document.getElementById("content").innerHTML = await res.text()
-    }
-</script>
 
+    <script>
+        // PopUp de Mensagens
+        function hideMsgPopUp() {
+        const messages = document.querySelectorAll(".msg-pop-up");
+
+        if (!messages.length) return;
+
+        messages.forEach((msg) => {
+            setTimeout(() => {
+            msg.style.opacity = "0";
+
+            setTimeout(() => {
+                msg.remove();
+            }, 500);
+            }, 3000);
+        });
+        }
+        document.addEventListener("DOMContentLoaded", hideMsgPopUp);
+
+        // Pesquisar
+        function enableSearch(inputId, targetSelector) {
+        const searchInput = document.getElementById(inputId);
+
+        if (!searchInput) return;
+
+        searchInput.addEventListener("input", function () {
+            const term = this.value.toLowerCase();
+            const lines = document.querySelectorAll(targetSelector);
+
+            lines.forEach((line) => {
+            const text = line.textContent.toLowerCase();
+            line.style.display = text.includes(term) ? "" : "none";
+            });
+        });
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+        enableSearch("search-files", "tbody tr");
+        });
+    </script>
+</body>
 </html>

@@ -1,34 +1,57 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-
 from .forms import AddFilmCardForm
+from api.models import FilmCard
+
+
+# ----- Views -----
 
 def control_panel(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return render(request, 'control_panel.html')
-    return render(request, 'base.html')
+    return render(request, 'control_panel.html')
+
 
 def users(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return render(request, 'users.html')
-    return render(request, 'base.html')
+    return render(request, 'users.html')
 
 
 def films(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type') # Tipo do formulario
+
+        # Adicionar novo filme
+        if form_type == 'add_form':
+            form = AddFilmCardForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Novo filme adicionado com sucesso!")
+                return redirect('films')
+            
+            else:
+                messages.error(request, "Formulário inválido!")
         
-        form = AddFilmCardForm()
+        # Deletar filme
+        if form_type == 'delete_form':
+            film_id = request.POST.get('film_id')
 
-        context = {
-            'form': form,
-        }
+            film = get_object_or_404(FilmCard, id=film_id)
+            film.delete()
+            messages.success(request, "Filme deletado com sucesso!")
+            return redirect('films')
+    
+    form = AddFilmCardForm()
+    
+    films = FilmCard.objects.all()
 
-        return render(request, 'films.html', context)
-    return render(request, 'base.html')
+    context = {
+        'form': form,
+        'films': films
+    }
+
+    return render(request, 'films.html', context)
+
 
 def categories(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return render(request, 'categories.html')
-    return render(request, 'base.html')
+    return render(request, 'categories.html')

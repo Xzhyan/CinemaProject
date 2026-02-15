@@ -21,6 +21,8 @@ class FilmCard(models.Model):
     display = models.CharField(choices=DISPLAY_CHOICES, default='on_display')
     thumb_url = models.URLField()
     ticket_url = models.URLField()
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
