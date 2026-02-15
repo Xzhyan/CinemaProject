@@ -6,14 +6,35 @@ from .forms import AddFilmCardForm
 from api.models import FilmCard
 
 
-# ----- Views -----
-
 def control_panel(request):
     return render(request, 'control_panel.html')
 
 
 def users(request):
     return render(request, 'users.html')
+
+
+# Editar filme
+def film_edit(request, id):
+    film = get_object_or_404(FilmCard, id=id)
+
+    if request.method == 'POST':
+        form = AddFilmCardForm(request.POST, instance=film)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Filme atualizado com sucesso!")
+            return redirect('films')
+
+    else:
+        form = AddFilmCardForm(instance=film)
+
+    context = {
+        'film': film,
+        'form': form
+    }
+
+    return render(request, 'film_edit.html', context)
 
 
 def films(request):
