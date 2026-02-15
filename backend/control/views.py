@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from .forms import AddFilmCardForm
-from api.models import FilmCard
+from .forms import AddFilmCardForm, AddCategoryForm
+from api.models import FilmCard, Category
 
 
 def control_panel(request):
@@ -14,7 +14,6 @@ def users(request):
     return render(request, 'users.html')
 
 
-# Editar filme
 def film_edit(request, id):
     film = get_object_or_404(FilmCard, id=id)
 
@@ -74,5 +73,58 @@ def films(request):
     return render(request, 'films.html', context)
 
 
+def category_edit(request, id):
+    category = get_object_or_404(Category, id=id)
+
+    if request.method == 'POST':
+        form = AddCategoryForm(request.POST, instance=category)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Categoria atualizada com sucesso!")
+            return redirect('categories')
+
+    else:
+        form = AddFilmCardForm(instance=category)
+
+    context = {
+        'category': category,
+        'form': form
+    }
+
+    return render(request, 'category_edit.html', context)
+
+
 def categories(request):
-    return render(request, 'categories.html')
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'add_form':
+            form = AddCategoryForm(request.POST)
+            
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Nova categoria adicionada com sucesso!")
+                return redirect('categories')
+
+            else:
+                messages.error(request, "Formulário inválido!")
+
+        if form_type == 'delete_form':
+            category_id = request.POST.get('category_id')
+
+            category = get_object_or_404(Category, id=category_id)
+            category.delete()
+            messages.success(request, "Categoria deletada com sucesso!")
+            return redirect('categories')
+
+    form = AddCategoryForm()
+
+    categories = Category.objects.all()
+
+    context = {
+        'form': form,
+        'categories': categories
+    }
+
+    return render(request, 'categories.html', context)

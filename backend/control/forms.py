@@ -5,6 +5,18 @@ from api.models import FilmCard, Category
 User = get_user_model()
 
 
+class AddCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Nome da categoria"
+            })
+        }
+
+
 class AddFilmCardForm(forms.ModelForm):
     class Meta:
         model = FilmCard

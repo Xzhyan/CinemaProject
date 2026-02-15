@@ -72,7 +72,7 @@
                             Editar
                         </a>
 
-                        <!-- Form do pra deletar filme -->
+                        <!-- Form pra deletar filme -->
                         <form method="POST">
                         {% csrf_token %}
                             <input type="number" class="hidden" name="film_id" value="{{ film.id }}">

@@ -2,44 +2,50 @@
 
 {% block content %}
 <div class="w-4xl bg-zinc-800 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
-    <!-- Card para adicionar novo Filme -->
-    <div class="bg-zinc-700 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
-        <h1 class="font-semibold">Editar o filme: {{ film.name }}</h1>
+    <div class="flex flex-col bg-zinc-700 rounded-sm p-2 shadow-md">
+        <a href="{% url 'films' %}" class="w-20 text-center bg-blue-800 hover:bg-blue-600 transition font-semibold rounded-sm p-2 shadow-md">
+            Voltar
+        </a>
 
-        <form method="POST" class="flex flex-col gap-2 text-gray-500">
-            {% csrf_token %}
-            
-            {{ form.name }}
+        <!-- Card para editar Filme -->
+        <div class="flex flex-col gap-2 text-center items-center">
+            <h1 class="font-semibold">Editar o filme: {{ film.name }}</h1>
 
-            {{ form.description }}
+            <form method="POST" class="flex flex-col gap-2 text-gray-500">
+                {% csrf_token %}
+                
+                {{ form.name }}
 
-            <div class="flex flex-row flex-wrap gap-4">
-                {% for checkbox in form.category %}
-                    <label class="flex items-center gap-2">
-                        {{ checkbox.tag }}
-                        <span>{{ checkbox.choice_label }}</span>
-                    </label>
-                {% endfor %}
-            </div>
+                {{ form.description }}
 
-            <div class="flex flex-row justify-center gap-4">
-                {{ form.duration }}
+                <div class="flex flex-row flex-wrap gap-4">
+                    {% for checkbox in form.category %}
+                        <label class="flex items-center gap-2">
+                            {{ checkbox.tag }}
+                            <span>{{ checkbox.choice_label }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
 
-                {{ form.age_control }}
+                <div class="flex flex-row justify-center gap-4">
+                    {{ form.duration }}
 
-                {{ form.display }}
-            </div>
+                    {{ form.age_control }}
 
-            <div class="flex flex-row justify-center gap-4">
-                {{ form.thumb_url }}
+                    {{ form.display }}
+                </div>
 
-                {{ form.ticket_url }}
-            </div>
+                <div class="flex flex-row justify-center gap-4">
+                    {{ form.thumb_url }}
 
-            <button type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
-                Salvar
-            </button>
-        </form>
+                    {{ form.ticket_url }}
+                </div>
+
+                <button type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
+                    Salvar
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
