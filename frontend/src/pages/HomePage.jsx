@@ -33,7 +33,11 @@ function HomePage() {
     <div className="">
       <h1>Home page</h1>
       {data.films?.map((film) => (
-        <div key={film.id}>{film.name}</div>
+        <div key={film.id} className="bg-zinc-700">
+          <h1>{film.name}</h1>
+          <p>{film.description}</p>
+          <span>{film.category}</span>
+        </div>
       ))}
     </div>
   );
