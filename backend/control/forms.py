@@ -54,3 +54,56 @@ class AddFilmCardForm(forms.ModelForm):
             })
         }
 
+
+class AddUserForm(forms.ModelForm):
+    password1 = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'placeholder': "Digite uma senha"
+        })
+    )
+    password2 = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'placeholder': "Confirme a senha"
+        })
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'is_active']
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Digite o nome de usuário"
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': "scale-180"
+            })
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        p1 = cleaned_data.get('password1')
+        p2 = cleaned_data.get('password2')
+
+        # Se for o form de criação de usuário.
+        if not self.instance.pk:
+            if not p1 or not p2:
+                raise forms.ValidationError("É obrigatório o uso de senha!")
+
+        if p1 and p2 and p1 != p2:
+            raise forms.ValidationError("As senhas não coincidem!")
+        
+        return cleaned_data
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
+
+        if commit:
+            user.save()
+
+        return user

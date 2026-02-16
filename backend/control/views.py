@@ -1,17 +1,79 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
-from .forms import AddFilmCardForm, AddCategoryForm
+from django.contrib.auth import update_session_auth_hash, get_user_model
+from .forms import AddFilmCardForm, AddCategoryForm, AddUserForm
 from api.models import FilmCard, Category
+
+
+User = get_user_model()
 
 
 def control_panel(request):
     return render(request, 'control_panel.html')
 
 
+def user_edit(request, id):
+    user = get_object_or_404(User, id=id)
+
+    if request.method == 'POST':
+        form = AddUserForm(request.POST, instance=user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Usuário atualizado com sucesso!")
+            return redirect('users')
+        
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
+
+    else:
+        form = AddUserForm(instance=user)
+
+    context = {
+        'user': user,
+        'form': form
+    }
+
+    return render(request, 'user/user_edit.html', context)
+
+
 def users(request):
-    return render(request, 'users.html')
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'add_form':
+            form = AddUserForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Novo usuário criado com sucesso!")
+                return redirect('users')
+
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
+
+        if form_type == 'delete_form':
+            user_id = request.POST.get('user_id')
+
+            user = get_object_or_404(User, id=user_id)
+            user.delete()
+            messages.success(request, "Usuário deletado com sucesso!")
+            return redirect('users')
+
+    form = AddUserForm()
+    users = User.objects.all()
+
+    context = {
+        'form': form,
+        'users': users
+    }
+
+    return render(request, 'user/users.html', context)
 
 
 def film_edit(request, id):
@@ -25,6 +87,9 @@ def film_edit(request, id):
             messages.success(request, "Filme atualizado com sucesso!")
             return redirect('films')
 
+        else:
+            messages.error(request, "Formulário inválido!")
+
     else:
         form = AddFilmCardForm(instance=film)
 
@@ -33,7 +98,7 @@ def film_edit(request, id):
         'form': form
     }
 
-    return render(request, 'film_edit.html', context)
+    return render(request, 'film/film_edit.html', context)
 
 
 def films(request):
@@ -70,7 +135,7 @@ def films(request):
         'films': films
     }
 
-    return render(request, 'films.html', context)
+    return render(request, 'film/films.html', context)
 
 
 def category_edit(request, id):
@@ -84,6 +149,9 @@ def category_edit(request, id):
             messages.success(request, "Categoria atualizada com sucesso!")
             return redirect('categories')
 
+        else:
+            messages.error(request, "Formulário inválido!")
+
     else:
         form = AddFilmCardForm(instance=category)
 
@@ -92,7 +160,7 @@ def category_edit(request, id):
         'form': form
     }
 
-    return render(request, 'category_edit.html', context)
+    return render(request, 'category/category_edit.html', context)
 
 
 def categories(request):
@@ -127,4 +195,4 @@ def categories(request):
         'categories': categories
     }
 
-    return render(request, 'categories.html', context)
+    return render(request, 'category/categories.html', context)
