@@ -36,7 +36,8 @@
                 - Painel de Controle
             </span>
         </h1>
-
+        
+        {% if user.is_authenticated %}
         <nav class="text-center space-x-2">
             <a href="{% url 'control-panel' %}"
                 class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
@@ -57,7 +58,13 @@
                 class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
                 Categorias
             </a>
+
+            <a href="{% url 'user-logout' %}"
+                class="bg-red-900 hover:bg-red-700 cursor-pointer transition rounded-md font-semibold p-2">
+                Sair
+            </a>
         </nav>
+        {% endif %}
     </header>
 
     <main>

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from api.models import FilmCard, Category
 
 User = get_user_model()
@@ -59,14 +60,14 @@ class AddUserForm(forms.ModelForm):
     password1 = forms.CharField(
         required=False,
         widget=forms.PasswordInput(attrs={
-            'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
             'placeholder': "Digite uma senha"
         })
     )
     password2 = forms.CharField(
         required=False,
         widget=forms.PasswordInput(attrs={
-            'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
             'placeholder': "Confirme a senha"
         })
     )
@@ -76,7 +77,7 @@ class AddUserForm(forms.ModelForm):
         fields = ['username', 'is_active']
         widgets = {
             'username': forms.TextInput(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Digite o nome de usuário"
             }),
             'is_active': forms.CheckboxInput(attrs={
@@ -107,3 +108,27 @@ class AddUserForm(forms.ModelForm):
             user.save()
 
         return user
+    
+
+class UserLoginForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'placeholder': "Digite o nome de usuário"
+        })
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'placeholder': "Digite sua senha de acesso"
+        })
+    )
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+
+        if not User.objects.filter(username=username).exists():
+            raise forms.ValidationError("O usuário não existe!")
+        
+        return username

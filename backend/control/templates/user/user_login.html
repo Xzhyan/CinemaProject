@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex justify-center">
+    <div class="w-full max-w-lg bg-zinc-800 rounded-sm shadow-md mt-20 text-center p-2">
+        <h1 class="font-semibold m-2">Faça login para acessar o Painel de Controle</h1>
+        <br>
+
+        <form method="POST" class="flex flex-col items-center gap-4">
+            {% csrf_token %}
+
+            {{ form.username }}
+
+            {{ form.password }}
+
+            <button type="submit" class="w-full max-w-30 bg-green-800 hover:bg-green-600 rounded-sm shadow-md p-2">
+                Acessar
+            </button>
+        </form>
+
+        <br>
+        <hr class="border-gray-600 shadow-md">
+        <br>
+
+        <p class="text-justify p-2">Se estiver com problemas para acessar o sistema ou precisa criar um usuário para acessar procure diretamente o administrador do sistema. Apenas ele pode criar e trocar senhas de usuários.</p>
+    </div>
+</div>
+{% endblock %}
