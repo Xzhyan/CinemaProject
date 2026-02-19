@@ -29,3 +29,15 @@ Utiliza **SQLite3**, por ser simples, leve e totalmente suficiente para as neces
 - React
 - Tailwind CSS
 - SQLite3
+
+## Licença (Uso do código)
+
+Mesmo o código estando disponível aqui no GitHub e ainda sem uma licença padronizada, siga as regras! Não use o código indevidamente, sem autorização e, principalmente, para fins comerciais.
+
+## Instalação e configuração
+
+Por se tratar de um projeto público aqui no GitHub, porém um projeto que não pode ser utilizado sem autorização, não vi necessidade de mostrar o passo a passo da instalação e configuração do mesmo.
+
+![img01](imgs/img01.png)
+![img02](imgs/img02.png)
+![img03](imgs/img03.png)

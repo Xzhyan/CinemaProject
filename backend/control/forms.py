@@ -113,14 +113,14 @@ class AddUserForm(forms.ModelForm):
 class UserLoginForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'class': "w-full max-w-sm bg-zinc-800 outline-none p-2 rounded-sm shadow-md",
             'placeholder': "Digite o nome de usuário"
         })
     )
 
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'class': "w-full max-w-sm bg-zinc-800 outline-none p-2 rounded-sm shadow-md",
             'placeholder': "Digite sua senha de acesso"
         })
     )
