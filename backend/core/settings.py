@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from os.path import join
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -129,3 +130,6 @@ AUTH_USER_MODEL = 'control.CustomUser'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+# Armazenamento de arquivos
+MEDIA_URL = '/archives/'
+MEDIA_ROOT = join(BASE_DIR, 'archives')

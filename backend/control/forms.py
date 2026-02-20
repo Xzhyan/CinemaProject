@@ -1,9 +1,38 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from api.models import FilmCard, Category
+from api.models import Session, Category, FilmCard
 
 User = get_user_model()
+
+
+class AddSessionForm(forms.ModelForm):
+    days_list = forms.MultipleChoiceField(
+        choices=Session.WEEK_CHOICES,
+        widget=forms.CheckboxSelectMultiple(attrs={
+            'class': "shadow-md"
+        })
+    )
+
+    film = forms.ModelChoiceField(
+        queryset=FilmCard.objects.all(),
+        widget=forms.RadioSelect,
+        empty_label=None
+    )
+
+    class Meta:
+        model = Session
+        fields = ['name', 'film', 'room']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Nome da sessão... ex: Sessão 01"
+            }),
+            'room': forms.TextInput(attrs={
+                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Sala do filme... ex: Sala 01"
+            })
+        }
 
 
 class AddCategoryForm(forms.ModelForm):
@@ -21,10 +50,10 @@ class AddCategoryForm(forms.ModelForm):
 class AddFilmCardForm(forms.ModelForm):
     class Meta:
         model = FilmCard
-        fields = ['name', 'category', 'description', 'duration', 'age_control', 'display', 'thumb_url', 'ticket_url']
+        fields = ['name', 'category', 'description', 'duration', 'age_rating', 'display', 'thumb_image', 'ticket_url']
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'class': "w-full max-w-68 bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Nome do filme"
             }),
             'description': forms.Textarea(attrs={
@@ -35,19 +64,16 @@ class AddFilmCardForm(forms.ModelForm):
                 'class': "shadow-md"
             }),
             'duration': forms.NumberInput(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Duração em minutos"
+                'class': "w-20 bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
             }),
-            'age_control': forms.NumberInput(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Classificação Indicativa"
+            'age_rating': forms.Select(attrs={
+                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
             }),
             'display': forms.Select(attrs={
                 'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
             }),
-            'thumb_url': forms.URLInput(attrs={
-                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Link do banner do filme"
+            'thumb_image': forms.FileInput(attrs={
+                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
             }),
             'ticket_url': forms.URLInput(attrs={
                 'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",

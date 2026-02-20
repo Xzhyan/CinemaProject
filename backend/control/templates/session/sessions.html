@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
+    <!-- Card para adicionar nova sessão -->
+    <div class="bg-zinc-800 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
+        <h1 class="font-semibold">Adicionar nova Sessão</h1>
+
+        <form method="POST" class="flex flex-col gap-2 text-gray-500">
+            {% csrf_token %}
+            
+            <div class="flex flex-row gap-4">
+                {{ form.name }}
+
+                {{ form.room }}
+            </div>
+
+            <hr>
+
+            <div class="flex flex-row flex-wrap gap-4">
+                {% for checkbox in form.days_list %}
+                    <label class="flex items-center gap-2">
+                        {{ checkbox.tag }}
+                        <span>{{ checkbox.choice_label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+
+            <hr>
+
+            <div class="flex gap-4">
+                {% for radio in form.film %}
+                    <label class="flex items-center gap-4"">
+                        {{ radio.tag }}
+                        <span>{{ radio.choice_label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+
+            <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
+                Salvar
+            </button>
+        </form>
+    </div>
+
+    <!-- Pesquisa do sistema -->
+    <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
+        <input id="search-files" type="search" placeholder="Procurar filme..." class="w-full max-w-md bg-zinc-800 rounded-sm p-2 shadow-md">
+    </div>
+
+    <!-- Lista de sessões -->
+    <div class="bg-zinc-700 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
+        <h1 class="font-semibold">Lista de sessões adicionadas</h1>
+
+        <table class="w-full text-center">
+            <thead>
+                <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
+                    <th class="p-1">Nome da Sessão</th>
+                    <th class="p-2">Visualização</th>
+                    <th class="p-2">Criado em</th>
+                    <th class="p-2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for film in films %}
+                <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
+                    <td class="p-2">{{ film.name }}</td>
+                    <td class="p-2">{{ film.get_display_display  }}</td>
+                    <td class="p-2">{{ film.created_at }}</td>
+                    <td class="p-2 flex flex-row justify-center items-center gap-2">
+                        <!-- Link para a página de editar filme -->
+                        <a href="{% url 'film-edit' film.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                            Editar
+                        </a>
+
+                        <!-- Form pra deletar filme -->
+                        <form method="POST">
+                        {% csrf_token %}
+                            <input type="number" class="hidden" name="film_id" value="{{ film.id }}">
+
+                            <button name="form_type" value="delete_form" class="bg-red-800 hover:bg-red-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                                Deletar
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

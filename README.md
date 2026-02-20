@@ -38,6 +38,20 @@ Mesmo o código estando disponível aqui no GitHub e ainda sem uma licença padr
 
 Por se tratar de um projeto público aqui no GitHub, porém um projeto que não pode ser utilizado sem autorização, não vi necessidade de mostrar o passo a passo da instalação e configuração do mesmo.
 
+---
+
+## Imagens do Painel de Controle
+
+Como mencionado as páginas administrativas do sistema foram construidas usando Django template com tailwind.
+
 ![img01](imgs/img01.png)
 ![img02](imgs/img02.png)
 ![img03](imgs/img03.png)
+
+## Mudanças
+
+Colocar opção de upload de imagem do banner
+
+Colocar age of watch para select, e adicionar as opções existentes já 'livre, +14, +18'
+
+Criar uma tabela pra Sessões e Salas

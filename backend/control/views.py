@@ -2,14 +2,26 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, get_user_model
-from .forms import UserLoginForm, AddFilmCardForm, AddCategoryForm, AddUserForm
+from django.utils import timezone
+from .forms import UserLoginForm, AddSessionForm, AddFilmCardForm, AddCategoryForm, AddUserForm
 from api.models import FilmCard, Category
 
 
 User = get_user_model()
 
 
-@login_required(login_url = 'user-login')
+@login_required(login_url='user-login')
+def sessions(request):
+    form = AddSessionForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'session/sessions.html', context)
+
+
+@login_required(login_url='user-login')
 def user_edit(request, id):
     user = get_object_or_404(User, id=id)
 
@@ -37,7 +49,7 @@ def user_edit(request, id):
     return render(request, 'user/user_edit.html', context)
 
 
-@login_required(login_url = 'user-login')
+@login_required(login_url='user-login')
 def users(request):
     if request.method == 'POST':
         form_type = request.POST.get('form_type')
@@ -74,15 +86,20 @@ def users(request):
     return render(request, 'user/users.html', context)
 
 
-@login_required(login_url = 'user-login')
+@login_required(login_url='user-login')
 def film_edit(request, id):
     film = get_object_or_404(FilmCard, id=id)
 
     if request.method == 'POST':
-        form = AddFilmCardForm(request.POST, instance=film)
+        form = AddFilmCardForm(request.POST, request.FILES, instance=film)
 
         if form.is_valid():
-            form.save()
+            film = form.save(commit=False)
+            film.modified_by = request.user
+            film.modidied_at = timezone.now()
+            film.save()
+            form.save_m2m()
+
             messages.success(request, "Filme atualizado com sucesso!")
             return redirect('films')
 
@@ -100,28 +117,37 @@ def film_edit(request, id):
     return render(request, 'film/film_edit.html', context)
 
 
-@login_required(login_url = 'user-login')
+@login_required(login_url='user-login')
 def films(request):
     if request.method == 'POST':
         form_type = request.POST.get('form_type') # Tipo do formulario
 
         # Adicionar novo filme
         if form_type == 'add_form':
-            form = AddFilmCardForm(request.POST)
+            form = AddFilmCardForm(request.POST, request.FILES)
 
             if form.is_valid():
-                form.save()
+                film = form.save(commit=False)
+                film.modified_by = request.user
+                film.save()
+                form.save_m2m()
+
                 messages.success(request, "Novo filme adicionado com sucesso!")
                 return redirect('films')
             
             else:
-                messages.error(request, "Formulário inválido!")
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f'{field} {error}')
+            # else:
+            #     messages.error(request, "Formulário inválido!")
         
         # Deletar filme
         if form_type == 'delete_form':
             film_id = request.POST.get('film_id')
 
             film = get_object_or_404(FilmCard, id=film_id)
+            film.thumb_image.delete(save=False)
             film.delete()
             messages.success(request, "Filme deletado com sucesso!")
             return redirect('films')
@@ -138,7 +164,7 @@ def films(request):
     return render(request, 'film/films.html', context)
 
 
-@login_required(login_url = 'user-login')
+@login_required(login_url='user-login')
 def category_edit(request, id):
     category = get_object_or_404(Category, id=id)
 
@@ -164,7 +190,7 @@ def category_edit(request, id):
     return render(request, 'category/category_edit.html', context)
 
 
-@login_required(login_url = 'user-login')
+@login_required(login_url='user-login')
 def categories(request):
     if request.method == 'POST':
         form_type = request.POST.get('form_type')

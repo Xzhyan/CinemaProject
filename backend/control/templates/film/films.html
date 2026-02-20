@@ -6,12 +6,18 @@
     <div class="bg-zinc-800 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
         <h1 class="font-semibold">Adicionar novo Filme</h1>
 
-        <form method="POST" class="flex flex-col gap-2 text-gray-500">
+        <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-2 text-gray-500">
             {% csrf_token %}
             
-            {{ form.name }}
+            <div class="flex flex-row gap-4">
+                {{ form.name }}
+
+                <span>Duração em minutos: {{ form.duration }}</span>
+            </div>
 
             {{ form.description }}
+
+            <hr>
 
             <div class="flex flex-row flex-wrap gap-4">
                 {% for checkbox in form.category %}
@@ -22,16 +28,16 @@
                 {% endfor %}
             </div>
 
-            <div class="flex flex-row justify-center gap-4">
-                {{ form.duration }}
+            <hr>
 
-                {{ form.age_control }}
+            <div class="flex flex-row justify-center items-center gap-4">
+                <span>Classificação Indicativa: {{ form.age_rating }}</span>
 
-                {{ form.display }}
+                <span>Visibilidade: {{ form.display }}</span>
             </div>
 
             <div class="flex flex-row justify-center gap-4">
-                {{ form.thumb_url }}
+                {{ form.thumb_image }}
 
                 {{ form.ticket_url }}
             </div>

@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 
@@ -8,6 +9,9 @@
 
     <!-- Tailwindcss -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 
 <body class="bg-zinc-950 text-gray-300">
@@ -31,7 +35,7 @@
 
     <header class="sticky top-0 z-40 w-full bg-zinc-950 flex p-4 items-center justify-between shadow-md border-b border-gray-700">
         <h1 class="font-semibold">
-            CinemaProject
+            CINE XV
             <span class="font-normal text-gray-500">
                 - Painel de Controle
             </span>
@@ -47,6 +51,11 @@
             <a href="{% url 'users' %}"
                 class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
                 Usuários
+            </a>
+
+            <a href="{% url 'sessions' %}"
+                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
+                Sessões
             </a>
 
             <a href="{% url 'films' %}"
