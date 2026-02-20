@@ -62,7 +62,8 @@
                 <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
                     <th class="p-1">Nome do Filme</th>
                     <th class="p-2">Visualização</th>
-                    <th class="p-2">Criado em</th>
+                    <th class="p-2">Modificado em</th>
+                    <th class="p-2">Por</th>
                     <th class="p-2">Ações</th>
                 </tr>
             </thead>
@@ -71,7 +72,8 @@
                 <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
                     <td class="p-2">{{ film.name }}</td>
                     <td class="p-2">{{ film.get_display_display  }}</td>
-                    <td class="p-2">{{ film.created_at }}</td>
+                    <td class="p-2">{{ film.modified_at }}</td>
+                    <td class="p-2">{{ film.modified_by }}</td>
                     <td class="p-2 flex flex-row justify-center items-center gap-2">
                         <!-- Link para a página de editar filme -->
                         <a href="{% url 'film-edit' film.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">

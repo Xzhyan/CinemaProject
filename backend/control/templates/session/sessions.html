@@ -55,28 +55,30 @@
         <table class="w-full text-center">
             <thead>
                 <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
-                    <th class="p-1">Nome da Sessão</th>
-                    <th class="p-2">Visualização</th>
-                    <th class="p-2">Criado em</th>
+                    <th class="p-2">Nome da Sessão</th>
+                    <th class="p-2">Filme</th>
+                    <th class="p-2">Modificado em</th>
+                    <th class="p-2">Por</th>
                     <th class="p-2">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                {% for film in films %}
+                {% for session in sessions %}
                 <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
-                    <td class="p-2">{{ film.name }}</td>
-                    <td class="p-2">{{ film.get_display_display  }}</td>
-                    <td class="p-2">{{ film.created_at }}</td>
+                    <td class="p-2">{{ session.name }}</td>
+                    <td class="p-2">{{ session.film }}</td>
+                    <td class="p-2">{{ session.modified_at }}</td>
+                    <td class="p-2">{{ session.modified_by }}</td>
                     <td class="p-2 flex flex-row justify-center items-center gap-2">
-                        <!-- Link para a página de editar filme -->
-                        <a href="{% url 'film-edit' film.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                        <!-- Link para a página de editar sessão -->
+                        <a href="{% url 'session-edit' session.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
                             Editar
                         </a>
 
                         <!-- Form pra deletar filme -->
                         <form method="POST">
                         {% csrf_token %}
-                            <input type="number" class="hidden" name="film_id" value="{{ film.id }}">
+                            <input type="number" class="hidden" name="session_id" value="{{ session.id }}">
 
                             <button name="form_type" value="delete_form" class="bg-red-800 hover:bg-red-600 p-2 rounded-sm cursor-pointer transition font-semibold">
                                 Deletar

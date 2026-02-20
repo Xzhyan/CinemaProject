@@ -30,6 +30,8 @@
             <thead>
                 <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
                     <th class="p-1">Nome da Categoria</th>
+                    <th class="p-1">Modificado em</th>
+                    <th class="p-1">Por</th>
                     <th class="p-2">Ações</th>
                 </tr>
             </thead>
@@ -37,6 +39,8 @@
                 {% for category in categories %}
                 <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
                     <td class="p-2">{{ category.name }}</td>
+                    <td class="p-2">{{ category.modified_at }}</td>
+                    <td class="p-2">{{ category.modified_by }}</td>
                     <td class="p-2 flex flex-row justify-center items-center gap-2">
                         <!-- Link para a página de editar categoria -->
                         <a href="{% url 'category-edit' category.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">

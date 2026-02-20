@@ -48,10 +48,8 @@ Como mencionado as páginas administrativas do sistema foram construidas usando 
 ![img02](imgs/img02.png)
 ![img03](imgs/img03.png)
 
-## Mudanças
+1. Adicionar CHOICE de versão no Model FilmCard
 
-Colocar opção de upload de imagem do banner
+2. Verificar tudo
 
-Colocar age of watch para select, e adicionar as opções existentes já 'livre, +14, +18'
-
-Criar uma tabela pra Sessões e Salas
+3. Terminar Session

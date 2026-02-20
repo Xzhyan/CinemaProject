@@ -11,7 +11,8 @@ class AddSessionForm(forms.ModelForm):
         choices=Session.WEEK_CHOICES,
         widget=forms.CheckboxSelectMultiple(attrs={
             'class': "shadow-md"
-        })
+        }),
+        required=True
     )
 
     film = forms.ModelChoiceField(
@@ -22,7 +23,7 @@ class AddSessionForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ['name', 'film', 'room']
+        fields = ['name', 'days_list', 'film', 'room']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
@@ -33,6 +34,10 @@ class AddSessionForm(forms.ModelForm):
                 'placeholder': "Sala do filme... ex: Sala 01"
             })
         }
+
+    def clean_days_list(self):
+        data = self.cleaned_data['days_list']
+        return list(data)
 
 
 class AddCategoryForm(forms.ModelForm):

@@ -11,5 +11,6 @@ urlpatterns = [
     path('film-edit/<int:id>/', views.film_edit, name='film-edit'),
     path('categories/', views.categories, name='categories'),
     path('category-edit/<int:id>/', views.category_edit, name='category-edit'),
-    path('sessions/', views.sessions, name='sessions')
+    path('sessions/', views.sessions, name='sessions'),
+    path('sessions-edit/<int:id>', views.session_edit, name='session-edit')
 ]

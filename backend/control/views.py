@@ -1,21 +1,84 @@
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, get_user_model
 from django.utils import timezone
+
+# Forms
 from .forms import UserLoginForm, AddSessionForm, AddFilmCardForm, AddCategoryForm, AddUserForm
-from api.models import FilmCard, Category
+
+# Models
+from api.models import Session, FilmCard, Category
 
 
+# Modelo do usuário custom
 User = get_user_model()
 
 
 @login_required(login_url='user-login')
-def sessions(request):
-    form = AddSessionForm()
+def session_edit(request, id):
+    session = get_object_or_404(Session, id=id)
+
+    if request.method == 'POST':
+        form = AddSessionForm(request.POST, instance=session)
+
+        if form.is_valid():
+            session = form.save(commit=False)
+            session.modified_by = request.user
+            session.modified_at = timezone.now()
+            session.save()
+            messages.success(request, "Sessão alterada com sucesso!")
+            return redirect('sessions')
+
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
+
+    else:
+        form = AddSessionForm(instance=session)
 
     context = {
         'form': form,
+        'session': session
+    }
+
+    return render(request, 'session/session_edit.html', context)
+
+
+@login_required(login_url='user-login')
+def sessions(request):
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'add_form':
+            form = AddSessionForm(request.POST)
+
+            if form.is_valid():
+                session = form.save(commit=False)
+                session.modified_by = request.user
+                session.save()
+                messages.success(request, "Nova sessão adicionada com sucesso!")
+                return redirect('sessions')
+
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
+
+        if form_type == 'delete_form':
+            session_id = request.POST.get('session_id')
+            session = get_object_or_404(Session, id=session_id)
+            session.delete()
+            messages.success(request, "Sessão deletada com sucesso!")
+
+    form = AddSessionForm()
+    
+    sessions = Session.objects.all()
+
+    context = {
+        'form': form,
+        'sessions': sessions
     }
 
     return render(request, 'session/sessions.html', context)
@@ -53,7 +116,7 @@ def user_edit(request, id):
 def users(request):
     if request.method == 'POST':
         form_type = request.POST.get('form_type')
-
+    
         if form_type == 'add_form':
             form = AddUserForm(request.POST)
 
@@ -96,7 +159,7 @@ def film_edit(request, id):
         if form.is_valid():
             film = form.save(commit=False)
             film.modified_by = request.user
-            film.modidied_at = timezone.now()
+            film.modified_at = timezone.now()
             film.save()
             form.save_m2m()
 
@@ -104,7 +167,9 @@ def film_edit(request, id):
             return redirect('films')
 
         else:
-            messages.error(request, "Formulário inválido!")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
 
     else:
         form = AddFilmCardForm(instance=film)
@@ -120,9 +185,8 @@ def film_edit(request, id):
 @login_required(login_url='user-login')
 def films(request):
     if request.method == 'POST':
-        form_type = request.POST.get('form_type') # Tipo do formulario
+        form_type = request.POST.get('form_type')
 
-        # Adicionar novo filme
         if form_type == 'add_form':
             form = AddFilmCardForm(request.POST, request.FILES)
 
@@ -139,10 +203,7 @@ def films(request):
                 for field, errors in form.errors.items():
                     for error in errors:
                         messages.error(request, f'{field} {error}')
-            # else:
-            #     messages.error(request, "Formulário inválido!")
-        
-        # Deletar filme
+
         if form_type == 'delete_form':
             film_id = request.POST.get('film_id')
 
@@ -172,12 +233,17 @@ def category_edit(request, id):
         form = AddCategoryForm(request.POST, instance=category)
 
         if form.is_valid():
-            form.save()
+            category = form.save(commit=False)
+            category.modified_by = request.user
+            category.modified_at = timezone.now()
+            category.save()
             messages.success(request, "Categoria atualizada com sucesso!")
             return redirect('categories')
 
         else:
-            messages.error(request, "Formulário inválido!")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
 
     else:
         form = AddFilmCardForm(instance=category)
@@ -199,12 +265,16 @@ def categories(request):
             form = AddCategoryForm(request.POST)
             
             if form.is_valid():
-                form.save()
+                category = form.save(commit=False)
+                category.modified_by = request.user
+                category.save()
                 messages.success(request, "Nova categoria adicionada com sucesso!")
                 return redirect('categories')
 
             else:
-                messages.error(request, "Formulário inválido!")
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
 
         if form_type == 'delete_form':
             category_id = request.POST.get('category_id')
