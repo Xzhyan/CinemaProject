@@ -39,6 +39,9 @@ backend/htmlcov/
 backend/**/migrations/__pycache__/
 backend/**/migrations/*.pyc
 
+#### Others, Backend
+backend/archives/
+
 ################################
 # NODE / REACT (frontend/)
 ################################

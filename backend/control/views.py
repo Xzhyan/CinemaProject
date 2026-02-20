@@ -157,6 +157,7 @@ def film_edit(request, id):
         form = AddFilmCardForm(request.POST, request.FILES, instance=film)
 
         if form.is_valid():
+            # Implementar metodo pra mudar a imagem se for atualizada
             film = form.save(commit=False)
             film.modified_by = request.user
             film.modified_at = timezone.now()
