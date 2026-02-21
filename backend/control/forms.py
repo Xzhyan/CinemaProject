@@ -16,7 +16,7 @@ class AddSessionForm(forms.ModelForm):
     )
 
     film = forms.ModelChoiceField(
-        queryset=FilmCard.objects.all(),
+        queryset=FilmCard.objects.none(),
         widget=forms.RadioSelect,
         empty_label=None
     )
@@ -34,6 +34,15 @@ class AddSessionForm(forms.ModelForm):
                 'placeholder': "Sala do filme... ex: Sala 01"
             })
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Filtra os filmes que estão na tabela Session
+        used_films = Session.objects.values_list('film_id', flat=True)
+
+        # Excluí os filmes já usados do form, para evitar duplicatas
+        self.fields['film'].queryset = FilmCard.objects.exclude(id__in=used_films)
 
     def clean_days_list(self):
         data = self.cleaned_data['days_list']

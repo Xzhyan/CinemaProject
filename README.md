@@ -53,3 +53,5 @@ Como mencionado as páginas administrativas do sistema foram construidas usando 
 2. Verificar tudo
 
 3. Terminar Session
+
+4. Colocar o campo de Horario do Filme

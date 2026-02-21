@@ -154,15 +154,19 @@ def film_edit(request, id):
     film = get_object_or_404(FilmCard, id=id)
 
     if request.method == 'POST':
+        old_thumb_img = film.thumb_image # Imagem antiga do filme
         form = AddFilmCardForm(request.POST, request.FILES, instance=film)
 
         if form.is_valid():
-            # Implementar metodo pra mudar a imagem se for atualizada
             film = form.save(commit=False)
             film.modified_by = request.user
             film.modified_at = timezone.now()
             film.save()
             form.save_m2m()
+
+            # Apaga a imagem antiga, se for alterada
+            if 'thumb_image' in request.FILES and old_thumb_img:
+                old_thumb_img.delete(save=False)
 
             messages.success(request, "Filme atualizado com sucesso!")
             return redirect('films')

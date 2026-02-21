@@ -55,8 +55,9 @@ class Session(models.Model):
     ]
 
     name = models.CharField(max_length=100, unique=True)
+    # time = models.TimeField()
     days_list = models.JSONField(default=list)
-    film = models.ForeignKey(FilmCard, on_delete=models.CASCADE, related_name='session_film')
+    film = models.OneToOneField(FilmCard, on_delete=models.CASCADE, related_name='session_film')
     room = models.CharField(max_length=100)
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='modified_sessions')
     modified_at = models.DateTimeField(auto_now_add=True)
