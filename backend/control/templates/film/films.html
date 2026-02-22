@@ -4,96 +4,149 @@
 <div class="w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
     <!-- Card para adicionar novo Filme -->
     <div class="bg-zinc-800 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
-        <h1 class="font-semibold">Adicionar novo Filme</h1>
+        <button onclick="toggleAccordion('form_div')" class="w-full flex justify-between hover:bg-zinc-700 cursor-pointer p-2 rounded-sm shadow-md">
+            <span>
+                <h1 class="font-semibold">Adicionar novo Filme</h1>
+            </span>
 
-        <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-2 text-gray-500">
-            {% csrf_token %}
-            
-            <div class="flex flex-row gap-4">
-                {{ form.name }}
+            <svg
+                id="icon-section1"
+                class="w-5 h-5 transition-transform duration-300 transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+                />
+            </svg>
+        </button>
 
-                <span>Duração em minutos: {{ form.duration }}</span>
-            </div>
+        <div id="form_div" class="hidden">
+            <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-2 text-gray-500">
+                {% csrf_token %}
+                
+                <div class="flex flex-row gap-4">
+                    {{ form.name }}
 
-            {{ form.description }}
+                    <span>Duração em minutos: {{ form.duration }}</span>
+                </div>
 
-            <hr>
+                {{ form.description }}
 
-            <div class="flex flex-row flex-wrap gap-4">
-                {% for checkbox in form.category %}
-                    <label class="flex items-center gap-2">
-                        {{ checkbox.tag }}
-                        <span>{{ checkbox.choice_label }}</span>
-                    </label>
-                {% endfor %}
-            </div>
+                <hr>
 
-            <hr>
+                <div class="flex flex-row flex-wrap gap-4">
+                    {% for checkbox in form.category %}
+                        <label class="flex items-center gap-2">
+                            {{ checkbox.tag }}
+                            <span>{{ checkbox.choice_label }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
 
-            <div class="flex flex-row justify-center items-center gap-4">
-                <span>Classificação Indicativa: {{ form.age_rating }}</span>
+                <hr>
 
-                <span>Visibilidade: {{ form.display }}</span>
-            </div>
+                <div class="flex flex-row flex-wrap gap-4">
+                    {% for checkbox in form.version %}
+                        <label class="flex items-center gap-2">
+                            {{ checkbox.tag }}
+                            <span>{{ checkbox.choice_label }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
 
-            <div class="flex flex-row justify-center gap-4">
-                {{ form.thumb_image }}
+                <hr>
 
-                {{ form.ticket_url }}
-            </div>
+                <div class="flex flex-row justify-center items-center gap-4">
+                    <span>Classificação Indicativa: {{ form.age_rating }}</span>
 
-            <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
-                Salvar
-            </button>
-        </form>
+                    <span>Visibilidade: {{ form.display }}</span>
+                </div>
+
+                <div class="flex flex-row justify-center gap-4">
+                    {{ form.thumb_image }}
+
+                    {{ form.ticket_url }}
+                </div>
+
+                <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
+                    Salvar
+                </button>
+            </form>
+        </div>
     </div>
 
-    <!-- Pesquisa do sistema -->
-    <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
-        <input id="search-files" type="search" placeholder="Procurar filme..." class="w-full max-w-md bg-zinc-800 rounded-sm p-2 shadow-md">
-    </div>
+    <div id="list_div">
+        <!-- Pesquisa do sistema -->
+        <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
+            <input id="search-files" type="search" placeholder="Procurar filme..." class="w-full max-w-md bg-zinc-800 rounded-sm p-2 shadow-md">
+        </div>
 
-    <!-- Lista de filmes -->
-    <div class="bg-zinc-700 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
-        <h1 class="font-semibold">Lista de filmes adicionados</h1>
+        <!-- Lista de filmes -->
+        <div class="bg-zinc-700 flex flex-col mt-2 gap-2 text-center items-center rounded-sm p-2 shadow-md">
+            <h1 class="font-semibold">Lista de filmes adicionados</h1>
 
-        <table class="w-full text-center">
-            <thead>
-                <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
-                    <th class="p-1">Nome do Filme</th>
-                    <th class="p-2">Visualização</th>
-                    <th class="p-2">Modificado em</th>
-                    <th class="p-2">Por</th>
-                    <th class="p-2">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for film in films %}
-                <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
-                    <td class="p-2">{{ film.name }}</td>
-                    <td class="p-2">{{ film.get_display_display  }}</td>
-                    <td class="p-2">{{ film.modified_at }}</td>
-                    <td class="p-2">{{ film.modified_by }}</td>
-                    <td class="p-2 flex flex-row justify-center items-center gap-2">
-                        <!-- Link para a página de editar filme -->
-                        <a href="{% url 'film-edit' film.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
-                            Editar
-                        </a>
+            <table class="w-full text-center">
+                <thead>
+                    <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
+                        <th class="p-1">Nome do Filme</th>
+                        <th class="p-2">Visualização</th>
+                        <th class="p-2">Modificado em</th>
+                        <th class="p-2">Por</th>
+                        <th class="p-2">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for film in films %}
+                    <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
+                        <td class="p-2">{{ film.name }}</td>
+                        <td class="p-2">{{ film.get_display_display  }}</td>
+                        <td class="p-2">{{ film.modified_at }}</td>
+                        <td class="p-2">{{ film.modified_by }}</td>
+                        <td class="p-2 flex flex-row justify-center items-center gap-2">
+                            <!-- Link para a página de editar filme -->
+                            <a href="{% url 'film-edit' film.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                                Editar
+                            </a>
 
-                        <!-- Form pra deletar filme -->
-                        <form method="POST">
-                        {% csrf_token %}
-                            <input type="number" class="hidden" name="film_id" value="{{ film.id }}">
+                            <!-- Form pra deletar filme -->
+                            <form method="POST">
+                            {% csrf_token %}
+                                <input type="number" class="hidden" name="film_id" value="{{ film.id }}">
 
-                            <button name="form_type" value="delete_form" class="bg-red-800 hover:bg-red-600 p-2 rounded-sm cursor-pointer transition font-semibold">
-                                Deletar
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                                <button name="form_type" value="delete_form" class="bg-red-800 hover:bg-red-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                                    Deletar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<script>
+    // Função para simular um acordeon.
+    function toggleAccordion(id) {
+    const content = document.getElementById(id);
+    const list = document.getElementById('list_div');
+    const icon = document.getElementById("icon-" + id);
+
+    if (content.classList.contains("hidden")) {
+        content.classList.remove("hidden");
+        list.classList.add('hidden');
+        icon.classList.add("rotate-180");
+    } else {
+        content.classList.add("hidden");
+        list.classList.remove('hidden');
+        icon.classList.remove("rotate-180");
+    }
+    }
+</script>
 {% endblock %}
