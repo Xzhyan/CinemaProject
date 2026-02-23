@@ -9,11 +9,19 @@
                 <h1 class="font-semibold">Adicionar novo Filme</h1>
             </span>
 
-            <!-- Icone do accordion -->
-            <svg id="icon-form_div" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            <svg
+                id="icon-form_div"
                 class="w-5 h-5 transition-transform duration-300 transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
             >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+                />
             </svg>
         </button>
 
@@ -23,7 +31,7 @@
                 
                 <div class="flex flex-row gap-4">
                     {{ form.name }}
-                    
+
                     <span>Duração em minutos: {{ form.duration }}</span>
                 </div>
 
@@ -32,10 +40,14 @@
                 <hr>
 
                 <div class="flex flex-row flex-wrap gap-4">
+                    <div class="w-full bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
+                        <input id="search-category" type="search" placeholder="Procurar por categoria/gênero..." class="bg-zinc-800 rounded-sm p-2 shadow-md">
+                    </div>
+
                     {% for checkbox in form.category %}
-                        <label class="flex justify-center gap-2">
+                        <label class="category-checkbox gap-2 hidden">
                             {{ checkbox.tag }}
-                            <span>{{ checkbox.choice_label }}</span>
+                            <span class="category-label">{{ checkbox.choice_label }}</span>
                         </label>
                     {% endfor %}
                 </div>
@@ -43,10 +55,14 @@
                 <hr>
 
                 <div class="flex flex-row flex-wrap gap-4">
+                    <div class="w-full bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
+                        <input id="search-version" type="search" placeholder="Procurar por categoria/gênero..." class="bg-zinc-800 rounded-sm p-2 shadow-md">
+                    </div>
+
                     {% for checkbox in form.version %}
-                        <label class="flex items-center gap-2">
+                        <label class="version-checkbox gap-2 hidden">
                             {{ checkbox.tag }}
-                            <span>{{ checkbox.choice_label }}</span>
+                            <span class="version-label">{{ checkbox.choice_label }}</span>
                         </label>
                     {% endfor %}
                 </div>
@@ -140,5 +156,30 @@
             icon.classList.remove("rotate-180");
         }
     }
+
+    function setupSearch(inputId, checkboxSelector, labelSelector) {
+        const input = document.getElementById(inputId);
+        const checkboxes = document.querySelectorAll(checkboxSelector);
+
+        input.addEventListener('input', () => {
+            const value = input.value.toLowerCase().trim();
+
+            checkboxes.forEach(el => {
+                const label = el.querySelector(labelSelector).innerText.toLowerCase();
+
+                if (!value || label.includes(value)) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+        });
+    }
+
+    // Categoria
+    setupSearch('search-category', '.category-checkbox', '.category-label');
+
+    // Versão
+    setupSearch('search-version', '.version-checkbox', '.version-label');
 </script>
 {% endblock %}
