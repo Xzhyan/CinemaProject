@@ -63,7 +63,7 @@ class AddCategoryForm(forms.ModelForm):
 class AddFilmCardForm(forms.ModelForm):
     class Meta:
         model = FilmCard
-        fields = ['name', 'category', 'description', 'version', 'duration', 'age_rating', 'display', 'thumb_image', 'ticket_url']
+        fields = ['name', 'category', 'description', 'duration', 'age_rating', 'display', 'thumb_image', 'ticket_url']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-full max-w-68 bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
@@ -72,9 +72,6 @@ class AddFilmCardForm(forms.ModelForm):
             'description': forms.Textarea(attrs={
                 'class': "h-[100px] bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Descrição do filme..."
-            }),
-            'version': forms.CheckboxSelectMultiple(attrs={
-                'class': "shadow-md"
             }),
             'category': forms.CheckboxSelectMultiple(attrs={
                 'class': "shadow-md"
