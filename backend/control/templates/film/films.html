@@ -21,7 +21,7 @@
             <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-2 text-gray-500">
                 {% csrf_token %}
                 
-                <div class="flex flex-row gap-4">
+                <div class="flex flex-row justify-center gap-4">
                     {{ form.name }}
                     
                     <span>Duração em minutos: {{ form.duration }}</span>
@@ -29,27 +29,21 @@
 
                 {{ form.description }}
 
+                {{ form.director }}
+
+                {{ form.movie_cast }}
+
                 <hr>
 
-                <div class="flex flex-row flex-wrap gap-4">
-                    {% for checkbox in form.category %}
-                        <label class="flex justify-center gap-2">
+                <p>Gêneros do filme:</p>
+                <div class="w-xl flex flex-row flex-wrap gap-4">
+                    {% for checkbox in form.film_genre %}
+                        <label class="flex justify-center gap-2 cursor-pointer">
                             {{ checkbox.tag }}
                             <span>{{ checkbox.choice_label }}</span>
                         </label>
                     {% endfor %}
                 </div>
-
-                <hr>
-
-                <!-- <div class="flex flex-row flex-wrap gap-4">
-                    {% for checkbox in form.version %}
-                        <label class="flex items-center gap-2">
-                            {{ checkbox.tag }}
-                            <span>{{ checkbox.choice_label }}</span>
-                        </label>
-                    {% endfor %}
-                </div> -->
 
                 <hr>
 
@@ -59,10 +53,11 @@
                     <span>Visibilidade: {{ form.display }}</span>
                 </div>
 
-                <div class="flex flex-row justify-center gap-4">
-                    {{ form.thumb_image }}
+                {{ form.ticket_url }}
 
-                    {{ form.ticket_url }}
+                <div class="flex flex-col justify-center">
+                    <p>Carregue a imagem de capa do filme abaixo:</p>
+                    {{ form.thumb_image }}
                 </div>
 
                 <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">

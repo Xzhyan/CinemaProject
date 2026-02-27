@@ -9,7 +9,10 @@
 
         <!-- Card para editar Filme -->
         <div class="flex flex-col gap-2 text-center items-center">
-            <h1 class="font-semibold">Editar o usuário: {{ user.username }}</h1>
+            <h1 class="font-normal">
+                Editar o usuário:
+                <span class="font-semibold">{{ user.username }}</span>
+            </h1>
 
             <form method="POST" class="flex flex-col gap-2 text-gray-500">
                 {% csrf_token %}

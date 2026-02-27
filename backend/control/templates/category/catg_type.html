@@ -2,23 +2,14 @@
 
 {% block content %}
 <div class="w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
-    <!-- Card para adicionar novo Usuário -->
+    <!-- Adicionar tipo de categoria -->
     <div class="bg-zinc-800 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
-        <h1 class="font-semibold">Adicionar novo Usuário</h1>
+        <h1 class="font-semibold">Adicionar novo Tipo de Categoria</h1>
 
         <form method="POST" class="flex flex-col gap-2 text-gray-500">
             {% csrf_token %}
-
-            {{ form.username }}
-
-            {{ form.password1 }}
-
-            {{ form.password2 }}
-
-            <div class="flex items-center gap-2">
-                <label for="is_active" class="text-gray-300">Marque para criar um usuário já ativo: </label>
-                {{ form.is_active }}
-            </div>
+            
+            {{ form.name }}
 
             <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
                 Salvar
@@ -28,38 +19,38 @@
 
     <!-- Pesquisa do sistema -->
     <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
-        <input id="search-files" type="search" placeholder="Procurar usuário..." class="w-full max-w-md bg-zinc-800 hover:bg-zinc-600 transition rounded-sm p-2 shadow-md">
+        <input id="search-files" type="search" placeholder="Procurar categoria..." class="w-full max-w-md bg-zinc-800 hover:bg-zinc-600 transition rounded-sm p-2 shadow-md">
     </div>
 
-    <!-- Lista de filmes -->
+    <!-- Lista de Tipos de Categorias -->
     <div class="bg-zinc-700 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
-        <h1 class="font-semibold">Lista de usuários do sistema</h1>
+        <h1 class="font-semibold">Lista de Tipos de Categorias adicionadas</h1>
 
         <table class="w-full text-center">
             <thead>
                 <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
-                    <th class="p-1">Nome do Usuário</th>
-                    <th class="p-2">Staff</th>
-                    <th class="p-2">Status</th>
+                    <th class="p-1">Nome do Tipo</th>
+                    <th class="p-1">Modificado em</th>
+                    <th class="p-1">Por</th>
                     <th class="p-2">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                {% for user in users %}
+                {% for type in c_types %}
                 <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
-                    <td class="p-2">{{ user.username }}</td>
-                    <td class="p-2">{{ user.is_admin  }}</td>
-                    <td class="p-2">{{ user.is_active  }}</td>
+                    <td class="p-2">{{ type.name }}</td>
+                    <td class="p-2">{{ type.modified_at }}</td>
+                    <td class="p-2">{{ type.modified_by }}</td>
                     <td class="p-2 flex flex-row justify-center items-center gap-2">
-                        <!-- Link para a página de editar usuário -->
-                        <a href="{% url 'user-edit' user.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                        <!-- Link para a página de editar categoria -->
+                        <a href="{% url 'catg-type-edit' type.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
                             Editar
                         </a>
 
-                        <!-- Form pra deletar usuário -->
+                        <!-- Form pra deletar categoria -->
                         <form method="POST">
                         {% csrf_token %}
-                            <input type="number" class="hidden" name="user_id" value="{{ user.id }}">
+                            <input type="number" class="hidden" name="c_type_id" value="{{ type.id }}">
 
                             <button name="form_type" value="delete_form" class="bg-red-800 hover:bg-red-600 p-2 rounded-sm cursor-pointer transition font-semibold">
                                 Deletar

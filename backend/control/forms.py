@@ -1,10 +1,23 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from api.models import Session, Category, FilmCard
+from api.models import CategoryType, Category, FilmGenre, FilmCard, Session
 
 User = get_user_model()
 
 
+class AddCategoryTypeForm(forms.ModelForm):
+    class Meta:
+        model = CategoryType
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': "w-md bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Tipo de categoria... ex: Áudio, Vídeo, Idioma..." 
+            })
+        }
+
+
+# Atualizar
 class AddSessionForm(forms.ModelForm):
     days_list = forms.MultipleChoiceField(
         choices=Session.WEEK_CHOICES,
@@ -51,11 +64,14 @@ class AddSessionForm(forms.ModelForm):
 class AddCategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['name', 'category_type']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Nome da categoria"
+            }),
+            'category_type': forms.Select(attrs={
+                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
             })
         }
 
@@ -63,21 +79,29 @@ class AddCategoryForm(forms.ModelForm):
 class AddFilmCardForm(forms.ModelForm):
     class Meta:
         model = FilmCard
-        fields = ['name', 'category', 'description', 'duration', 'age_rating', 'display', 'thumb_image', 'ticket_url']
+        fields = ['name', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'display', 'thumb_image', 'ticket_url']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-full max-w-68 bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Nome do filme"
             }),
-            'description': forms.Textarea(attrs={
-                'class': "h-[100px] bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Descrição do filme..."
+            'film_genre': forms.CheckboxSelectMultiple(attrs={
+                'class': "cursor-pointer scale-130 shadow-md"
             }),
-            'category': forms.CheckboxSelectMultiple(attrs={
-                'class': "shadow-md"
+            'description': forms.Textarea(attrs={
+                'class': "w-xl h-[100px] bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Descrição do filme..."
             }),
             'duration': forms.NumberInput(attrs={
                 'class': "w-20 bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
+            }),
+            'director': forms.TextInput(attrs={
+                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Nome do diretor do filme"
+            }),
+            'movie_cast': forms.Textarea(attrs={
+                'class': "h-[60px] bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Nomes do elenco do filme separados por vírgula"
             }),
             'age_rating': forms.Select(attrs={
                 'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
@@ -95,18 +119,21 @@ class AddFilmCardForm(forms.ModelForm):
         }
 
 
+# ----- User forms -----
+
+
 class AddUserForm(forms.ModelForm):
     password1 = forms.CharField(
         required=False,
         widget=forms.PasswordInput(attrs={
-            'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'class': "w-full max-w-sm bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
             'placeholder': "Digite uma senha"
         })
     )
     password2 = forms.CharField(
         required=False,
         widget=forms.PasswordInput(attrs={
-            'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+            'class': "w-full max-w-sm bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
             'placeholder': "Confirme a senha"
         })
     )
@@ -116,11 +143,11 @@ class AddUserForm(forms.ModelForm):
         fields = ['username', 'is_active']
         widgets = {
             'username': forms.TextInput(attrs={
-                'class': "w-full max-w-sm bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'class': "w-full max-w-sm bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Digite o nome de usuário"
             }),
             'is_active': forms.CheckboxInput(attrs={
-                'class': "scale-180"
+                'class': "cursor-pointer scale-180"
             })
         }
 
@@ -141,7 +168,11 @@ class AddUserForm(forms.ModelForm):
     
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password1'])
+        new_password = self.cleaned_data['password1']
+
+        # Apénas troca a senha se uma nova for inserida
+        if new_password:
+            user.set_password(new_password)
 
         if commit:
             user.save()
@@ -152,14 +183,14 @@ class AddUserForm(forms.ModelForm):
 class UserLoginForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': "w-full max-w-sm bg-zinc-800 outline-none p-2 rounded-sm shadow-md",
+            'class': "w-full max-w-sm bg-zinc-800 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
             'placeholder': "Digite o nome de usuário"
         })
     )
 
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': "w-full max-w-sm bg-zinc-800 outline-none p-2 rounded-sm shadow-md",
+            'class': "w-full max-w-sm bg-zinc-800 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
             'placeholder': "Digite sua senha de acesso"
         })
     )

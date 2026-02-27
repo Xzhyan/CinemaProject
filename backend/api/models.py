@@ -9,11 +9,23 @@ class CategoryType(models.Model):
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mod_types')
     modified_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    category_type = models.ForeignKey(CategoryType, on_delete=models.CASCADE, related_name='categories')
+    category_type = models.ForeignKey(CategoryType, on_delete=models.SET_NULL, null=True, related_name='categories')
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mod_categories')
+    modified_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class FilmGenre(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mod_genre')
     modified_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -36,9 +48,11 @@ class FilmCard(models.Model):
     ]
 
     name = models.CharField(max_length=200, unique=True)
-    category = models.ManyToManyField(Category, related_name='films')
+    film_genre = models.ManyToManyField(FilmGenre, related_name='films')
     description = models.TextField()
     duration = models.PositiveIntegerField()
+    director = models.CharField(max_length=200)
+    movie_cast = models.TextField()
     age_rating = models.CharField(choices=AGE_CHOICES, default='livre')
     display = models.CharField(choices=DISPLAY_CHOICES, default='on_display')
     thumb_image = models.FileField(upload_to='thumbs/')

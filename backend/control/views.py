@@ -5,10 +5,10 @@ from django.contrib import messages
 from django.utils import timezone
 
 # Forms
-from .forms import UserLoginForm, AddSessionForm, AddFilmCardForm, AddCategoryForm, AddUserForm
+from .forms import UserLoginForm, AddUserForm, AddCategoryTypeForm, AddCategoryForm, AddFilmCardForm, AddSessionForm
 
 # Models
-from api.models import Session, FilmCard, Category
+from api.models import CategoryType, Category, FilmCard, Session
 
 
 # Modelo do usuário custom
@@ -82,71 +82,6 @@ def sessions(request):
     }
 
     return render(request, 'session/sessions.html', context)
-
-
-@login_required(login_url='user-login')
-def user_edit(request, id):
-    user = get_object_or_404(User, id=id)
-
-    if request.method == 'POST':
-        form = AddUserForm(request.POST, instance=user)
-
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Usuário atualizado com sucesso!")
-            return redirect('users')
-        
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, error)
-
-    else:
-        form = AddUserForm(instance=user)
-
-    context = {
-        'user': user,
-        'form': form
-    }
-
-    return render(request, 'user/user_edit.html', context)
-
-
-@login_required(login_url='user-login')
-def users(request):
-    if request.method == 'POST':
-        form_type = request.POST.get('form_type')
-    
-        if form_type == 'add_form':
-            form = AddUserForm(request.POST)
-
-            if form.is_valid():
-                form.save()
-                messages.success(request, "Novo usuário criado com sucesso!")
-                return redirect('users')
-
-            else:
-                for field, errors in form.errors.items():
-                    for error in errors:
-                        messages.error(request, error)
-
-        if form_type == 'delete_form':
-            user_id = request.POST.get('user_id')
-
-            user = get_object_or_404(User, id=user_id)
-            user.delete()
-            messages.success(request, "Usuário deletado com sucesso!")
-            return redirect('users')
-
-    form = AddUserForm()
-    users = User.objects.all()
-
-    context = {
-        'form': form,
-        'users': users
-    }
-
-    return render(request, 'user/users.html', context)
 
 
 @login_required(login_url='user-login')
@@ -250,12 +185,12 @@ def category_edit(request, id):
                 for error in errors:
                     messages.error(request, error)
 
-    else:
-        form = AddFilmCardForm(instance=category)
+    
+    form = AddCategoryForm(instance=category)
 
     context = {
-        'category': category,
-        'form': form
+        'form': form,
+        'category': category
     }
 
     return render(request, 'category/category_edit.html', context)
@@ -300,6 +235,139 @@ def categories(request):
 
     return render(request, 'category/categories.html', context)
 
+
+def catg_type_edit(request, id):
+    c_type = get_object_or_404(CategoryType, id=id)
+
+    if request.method == 'POST':
+        form = AddCategoryTypeForm(request.POST, instance=c_type)
+
+        if form.is_valid():
+            c_type = form.save(commit=False)
+            c_type.modified_by = request.user
+            c_type.modified_at = timezone.now()
+            c_type.save()
+            messages.success(request, "Tipo de categoria atualizada com sucesso!")
+            return redirect('catg-types')
+
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
+    
+    else:
+        form = AddCategoryTypeForm(instance=c_type)
+
+    context = {
+        'form': form,
+        'c_type': c_type
+    }
+
+    return render(request, 'category/catg_type_edit.html', context)
+
+
+def catg_type(request):
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'add_form':
+            form = AddCategoryTypeForm(request.POST)
+
+            if form.is_valid:
+                c_type = form.save(commit=False)
+                c_type.modified_by = request.user
+                c_type.save()
+                messages.success(request, "Novo tipo de categoria adicionada com sucesso!")
+                return redirect('catg-types')
+
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
+
+        if form_type == 'delete_form':
+            c_type_id = request.POST.get('c_type_id')
+            c_type = get_object_or_404(CategoryType, id=c_type_id)
+            c_type.delete()
+            messages.success(request, "Tipo de categoria deletada com sucesso!")
+            return redirect('catg-types')
+
+    else:
+        form = AddCategoryTypeForm()
+        c_types = CategoryType.objects.all()
+
+
+    context = {
+        'form': form,
+        'c_types': c_types
+    }
+    
+    return render(request, 'category/catg_type.html', context)
+
+
+@login_required(login_url='user-login')
+def user_edit(request, id):
+    user = get_object_or_404(User, id=id)
+
+    if request.method == 'POST':
+        form = AddUserForm(request.POST, instance=user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Usuário atualizado com sucesso!")
+            return redirect('users')
+        
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
+
+    else:
+        form = AddUserForm(instance=user)
+
+    context = {
+        'user': user,
+        'form': form
+    }
+
+    return render(request, 'user/user_edit.html', context)
+
+
+@login_required(login_url='user-login')
+def users(request):
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+    
+        if form_type == 'add_form':
+            form = AddUserForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Novo usuário criado com sucesso!")
+                return redirect('users')
+
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
+
+        if form_type == 'delete_form':
+            user_id = request.POST.get('user_id')
+
+            user = get_object_or_404(User, id=user_id)
+            user.delete()
+            messages.success(request, "Usuário deletado com sucesso!")
+            return redirect('users')
+
+    form = AddUserForm()
+    users = User.objects.all()
+
+    context = {
+        'form': form,
+        'users': users
+    }
+
+    return render(request, 'user/users.html', context)
 
 def user_logout(request):
     logout(request)
