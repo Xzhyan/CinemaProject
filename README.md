@@ -56,7 +56,7 @@ Como mencionado as páginas administrativas do sistema foram construidas usando 
 
 4. Colocar o campo de Horario do Filme
 
---------
+---
 
 py manage.py makemigrations api --empty -n insert_initial_data
 
@@ -64,9 +64,8 @@ py manage.py makemigrations api --empty -n insert_initial_data
 
 from django.db import migrations
 
-
 def insert_versions(apps, schema_editor):
-    Version = apps.get_model('api', 'Version')
+Version = apps.get_model('api', 'Version')
 
     versions = [
         "Dublado",
@@ -95,9 +94,8 @@ def insert_versions(apps, schema_editor):
     for name in versions:
         Version.objects.get_or_create(name=name)
 
-
 def insert_categories(apps, schema_editor):
-    Category = apps.get_model('api', 'Category')
+Category = apps.get_model('api', 'Category')
 
     categories = [
         "Ação",
@@ -154,3 +152,18 @@ class Migration(migrations.Migration):
         migrations.RunPython(insert_categories),
         migrations.RunPython(insert_versions),
     ]
+
+<!--
+
+TERMINAR DE ADICIONAR OS  hover:bg-zinc-700 transition
+MOUDAR OS TITULOS DOS EDIT
+            <h1 class="font-normal">
+                Editar o usuário:
+                <span class="font-semibold">{{ user.username }}</span>
+            </h1>
+
+ANALISAR OQUE MAIS PRECISA
+
+CRIAR O REGISTRO E EDIT DO FILM GENRE
+
+ -->
