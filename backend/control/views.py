@@ -3,12 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
+from collections import defaultdict
 
 # Forms
-from .forms import UserLoginForm, AddUserForm, AddCategoryTypeForm, AddCategoryForm, AddFilmCardForm, AddSessionForm
+from .forms import UserLoginForm, AddUserForm, AddCategoryTypeForm, AddCategoryForm, AddGenreForm, AddFilmCardForm, AddSessionForm
 
 # Models
-from api.models import CategoryType, Category, FilmCard, Session
+from api.models import CategoryType, Category, FilmGenre, FilmCard, Session
 
 
 # Modelo do usuário custom
@@ -23,10 +24,15 @@ def session_edit(request, id):
         form = AddSessionForm(request.POST, instance=session)
 
         if form.is_valid():
+            categories = request.POST.getlist('categories')
+
             session = form.save(commit=False)
             session.modified_by = request.user
             session.modified_at = timezone.now()
             session.save()
+
+            session.categories.set(request.POST.getlist('categories'))
+
             messages.success(request, "Sessão alterada com sucesso!")
             return redirect('sessions')
 
@@ -38,9 +44,19 @@ def session_edit(request, id):
     else:
         form = AddSessionForm(instance=session)
 
+    categories = Category.objects.all()
+
+    grouped_catgs = defaultdict(list)
+
+    for catg in categories:
+        grouped_catgs[catg.category_type].append(catg)
+
+    grouped_catgs = dict(grouped_catgs)
+
     context = {
         'form': form,
-        'session': session
+        'session': session,
+        'grouped_catgs': grouped_catgs
     }
 
     return render(request, 'session/session_edit.html', context)
@@ -55,9 +71,15 @@ def sessions(request):
             form = AddSessionForm(request.POST)
 
             if form.is_valid():
+                categories = request.POST.getlist('categories')
+                
                 session = form.save(commit=False)
                 session.modified_by = request.user
+                session.modified_at = timezone.now()
                 session.save()
+
+                session.categories.set(request.POST.getlist('categories'))
+
                 messages.success(request, "Nova sessão adicionada com sucesso!")
                 return redirect('sessions')
 
@@ -75,13 +97,92 @@ def sessions(request):
     form = AddSessionForm()
     
     sessions = Session.objects.all()
+    categories = Category.objects.all()
+
+    grouped_catgs = defaultdict(list)
+
+    for catg in categories:
+        grouped_catgs[catg.category_type].append(catg)
+
+    grouped_catgs = dict(grouped_catgs)
 
     context = {
         'form': form,
-        'sessions': sessions
+        'sessions': sessions,
+        'grouped_catgs': grouped_catgs
     }
 
     return render(request, 'session/sessions.html', context)
+
+
+@login_required(login_url='user-login')
+def genre_edit(request, id):
+    genre = get_object_or_404(FilmGenre, id=id)
+
+    if request.method == 'POST':
+        form = AddGenreForm(request.POST, instance=genre)
+        if form.is_valid():
+            genre = form.save(commit=False)
+            genre.modified_by = request.user
+            genre.modified_at = timezone.now()
+            genre.save()
+
+            messages.success(request, "Gênero modificado com sucesso!")
+            return redirect('genres')
+        
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
+
+    else:
+        form = AddGenreForm(instance=genre)
+
+    context = {
+        'form': form,
+        'genre': genre
+    }
+
+    return render(request, 'film/genre_edit.html', context)
+
+
+@login_required(login_url='user-login')
+def genres(request):
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'add_form':
+            form = AddGenreForm(request.POST)
+            if form.is_valid():
+                genre = form.save(commit=False)
+                genre.modified_by = request.user
+                genre.modified_at = timezone.now()
+                genre.save()
+                
+                messages.success(request, "Novo gênero adicionado com sucesso!")
+                return redirect('genres')
+
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
+
+        if form_type == 'delete_form':
+            genre_id = request.POST.get('genre_id')
+            genre = get_object_or_404(FilmGenre, id=genre_id)
+            genre.delete()
+            messages.success(request, "Gênero deletado com sucesso!")
+            return redirect('genres')
+
+    form = AddGenreForm()
+    genres = FilmGenre.objects.all()
+
+    context = {
+        'form': form,
+        'genres': genres
+    }
+
+    return render(request, 'film/genres.html', context)
 
 
 @login_required(login_url='user-login')

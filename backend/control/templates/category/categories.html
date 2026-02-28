@@ -4,14 +4,17 @@
 <div class="w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
     <!-- Adicionar categoria -->
     <div class="bg-zinc-800 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
-        <h1 class="font-semibold">Adicionar nova Categoria/Gênero</h1>
+        <h1 class="font-semibold">Adicionar nova Categoria</h1>
 
         <form method="POST" class="flex flex-col gap-2 text-gray-500">
             {% csrf_token %}
             
             {{ form.name }}
-
-            {{ form.category_type }}
+            
+            <div class="flex items-center gap-2">
+                <p>Tipo da categoria:</p>
+                {{ form.category_type }}
+            </div>
 
             <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
                 Salvar
@@ -21,7 +24,7 @@
 
     <!-- Pesquisa do sistema -->
     <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
-        <input id="search-files" type="search" placeholder="Procurar categoria..." class="w-full max-w-md bg-zinc-800 rounded-sm p-2 shadow-md">
+        <input id="search-files" type="search" placeholder="Procurar categoria..." class="w-full max-w-md bg-zinc-800 hover:bg-zinc-600 rounded-sm p-2 shadow-md">
     </div>
 
     <!-- Lista de Categorias -->

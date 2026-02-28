@@ -9,7 +9,10 @@
 
         <!-- Card para editar Categoria -->
         <div class="flex flex-col gap-2 text-center items-center">
-            <h1 class="font-semibold">Editar a categoria: {{ category.name }}</h1>
+            <h1 class="font-normal">
+                Editar a categoria:
+                <span class="font-semibold">{{ c_type.name }}</span>    
+            </h1>
 
             <form method="POST" class="flex flex-col gap-2 text-gray-500">
                 {% csrf_token %}

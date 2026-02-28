@@ -17,6 +17,10 @@ urlpatterns = [
     path('categories/', views.categories, name='categories'),
     path('category/edit/<int:id>/', views.category_edit, name='category-edit'),
 
+    # Gêneros
+    path('genres/', views.genres, name='genres'),
+    path('genres/edit/<int:id>', views.genre_edit, name='genre-edit'),
+
     # Filmes
     path('films/', views.films, name='films'),
     path('film/edit/<int:id>/', views.film_edit, name='film-edit'),

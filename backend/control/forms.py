@@ -5,6 +5,52 @@ from api.models import CategoryType, Category, FilmGenre, FilmCard, Session
 User = get_user_model()
 
 
+class AddSessionForm(forms.ModelForm):
+    film = forms.ModelChoiceField(
+        queryset=FilmCard.objects.all(),
+        widget=forms.RadioSelect(attrs={
+            'class': "shadow-md cursor-pointer"
+        }),
+        empty_label=None
+    )
+
+    class Meta:
+        model = Session
+        fields = ['name', 'film', 'time', 'week_day', 'room']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Nome da sessão... ex: Sessão 01"
+            }),
+            'time': forms.TimeInput(attrs={
+                'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Horário, ex: 19:00"
+            }),
+            'week_day': forms.Select(attrs={
+                'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
+            }),
+            'room': forms.TextInput(attrs={
+                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Sala do filme... ex: Sala 01"
+            })
+        }
+
+
+class AddCategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'category_type']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': "bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Nome da categoria"
+            }),
+            'category_type': forms.Select(attrs={
+                'class': "bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
+            })
+        }
+
+
 class AddCategoryTypeForm(forms.ModelForm):
     class Meta:
         model = CategoryType
@@ -17,61 +63,14 @@ class AddCategoryTypeForm(forms.ModelForm):
         }
 
 
-# Atualizar
-class AddSessionForm(forms.ModelForm):
-    days_list = forms.MultipleChoiceField(
-        choices=Session.WEEK_CHOICES,
-        widget=forms.CheckboxSelectMultiple(attrs={
-            'class': "shadow-md"
-        }),
-        required=True
-    )
-
-    film = forms.ModelChoiceField(
-        queryset=FilmCard.objects.none(),
-        widget=forms.RadioSelect,
-        empty_label=None
-    )
-
+class AddGenreForm(forms.ModelForm):
     class Meta:
-        model = Session
-        fields = ['name', 'days_list', 'film', 'room']
+        model = FilmGenre
+        fields = ['name']
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Nome da sessão... ex: Sessão 01"
-            }),
-            'room': forms.TextInput(attrs={
-                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Sala do filme... ex: Sala 01"
-            })
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Filtra os filmes que estão na tabela Session
-        used_films = Session.objects.values_list('film_id', flat=True)
-
-        # Excluí os filmes já usados do form, para evitar duplicatas
-        self.fields['film'].queryset = FilmCard.objects.exclude(id__in=used_films)
-
-    def clean_days_list(self):
-        data = self.cleaned_data['days_list']
-        return list(data)
-
-
-class AddCategoryForm(forms.ModelForm):
-    class Meta:
-        model = Category
-        fields = ['name', 'category_type']
-        widgets = {
-            'name': forms.TextInput(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Nome da categoria"
-            }),
-            'category_type': forms.Select(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
+                'class': "w-md bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Nome do gênero, ex: Ação, Suspense..."
             })
         }
 
@@ -82,38 +81,38 @@ class AddFilmCardForm(forms.ModelForm):
         fields = ['name', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'display', 'thumb_image', 'ticket_url']
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': "w-full max-w-68 bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'class': "w-full max-w-68 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Nome do filme"
             }),
             'film_genre': forms.CheckboxSelectMultiple(attrs={
                 'class': "cursor-pointer scale-130 shadow-md"
             }),
             'description': forms.Textarea(attrs={
-                'class': "w-xl h-[100px] bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'class': "w-xl h-[100px] bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Descrição do filme..."
             }),
             'duration': forms.NumberInput(attrs={
-                'class': "w-20 bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
+                'class': "w-20 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
             'director': forms.TextInput(attrs={
-                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Nome do diretor do filme"
             }),
             'movie_cast': forms.Textarea(attrs={
-                'class': "h-[60px] bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'class': "h-[60px] bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Nomes do elenco do filme separados por vírgula"
             }),
             'age_rating': forms.Select(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
+                'class': "bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
             'display': forms.Select(attrs={
-                'class': "bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
+                'class': "bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
             'thumb_image': forms.FileInput(attrs={
-                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md"
+                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
             'ticket_url': forms.URLInput(attrs={
-                'class': "w-full bg-zinc-900 outline-none p-2 rounded-sm shadow-md",
+                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Link de compra de ingressos"
             })
         }

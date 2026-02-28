@@ -14,28 +14,42 @@
 
                 {{ form.room }}
             </div>
+            
+            <div class="flex flex-row gap-4">
+                {{ form.week_day }}
 
-            <hr>
-
-            <div class="flex flex-row flex-wrap gap-4">
-                {% for checkbox in form.days_list %}
-                    <label class="flex items-center gap-2">
-                        {{ checkbox.tag }}
-                        <span>{{ checkbox.choice_label }}</span>
-                    </label>
-                {% endfor %}
+                {{ form.time }}
             </div>
 
             <hr>
 
             <div class="flex gap-4">
                 {% for radio in form.film %}
-                    <label class="flex items-center gap-4"">
+                    <label class="flex items-center gap-4 cursor-pointer">
                         {{ radio.tag }}
                         <span>{{ radio.choice_label }}</span>
                     </label>
                 {% endfor %}
             </div>
+
+            <hr>
+            
+            {% for type, cats in grouped_catgs.items %}
+                <div class="w-full">
+                    <h3 class="font-semibold">{{ type }}</h3>
+
+                    <div class="flex gap-2 flex-wrap">
+                        {% for cat in cats %}
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="categories" value="{{ cat.id }}">
+                                <span>{{ cat.name }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <hr>
+            {% endfor %}
 
             <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
                 Salvar
@@ -45,7 +59,7 @@
 
     <!-- Pesquisa do sistema -->
     <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
-        <input id="search-files" type="search" placeholder="Procurar filme..." class="w-full max-w-md bg-zinc-800 rounded-sm p-2 shadow-md">
+        <input id="search-files" type="search" placeholder="Procurar sessão..." class="w-full max-w-md bg-zinc-800 hover:bg-zinc-600 transition rounded-sm p-2 shadow-md">
     </div>
 
     <!-- Lista de sessões -->
