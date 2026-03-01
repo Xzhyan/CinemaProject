@@ -17,13 +17,13 @@
             <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-2 text-gray-500">
                 {% csrf_token %}
 
-                <div class="flex flex-row gap-4">
+                <div class="flex flex-row justify-center gap-4">
                     {{ form.name }}
 
                     {{ form.room }}
                 </div>
                 
-                <div class="flex flex-row gap-4">
+                <div class="flex flex-row justify-center gap-4">
                     {{ form.week_day }}
 
                     {{ form.time }}

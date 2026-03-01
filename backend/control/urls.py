@@ -5,7 +5,7 @@ urlpatterns = [
     # Login and home
     path('login/', views.user_login, name='user-login'),
     path('logout/', views.user_logout, name='user-logout'),
-    path('control-panel/', views.control_panel, name='control-panel'),
+    # path('control-panel/', views.control_panel, name='control-panel'),
 
     # Usuários
     path('users/', views.users, name='users'),

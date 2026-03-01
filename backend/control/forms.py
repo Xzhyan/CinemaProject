@@ -19,7 +19,7 @@ class AddSessionForm(forms.ModelForm):
         fields = ['name', 'film', 'time', 'week_day', 'room']
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'class': "w-70 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Nome da sessão... ex: Sessão 01"
             }),
             'time': forms.TimeInput(attrs={
@@ -30,7 +30,7 @@ class AddSessionForm(forms.ModelForm):
                 'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
             'room': forms.TextInput(attrs={
-                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'class': "w-70 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Sala do filme... ex: Sala 01"
             })
         }

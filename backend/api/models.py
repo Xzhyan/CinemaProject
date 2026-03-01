@@ -76,7 +76,7 @@ class Session(models.Model):
     ]
 
     name = models.CharField(max_length=100, unique=True)
-    film = models.OneToOneField(FilmCard, on_delete=models.CASCADE, related_name='session')
+    film = models.ForeignKey(FilmCard, on_delete=models.CASCADE, related_name='session')
     time = models.TimeField()
     categories = models.ManyToManyField(Category, related_name='session_catg')
     week_day = models.CharField(max_length=50, choices=WEEK_CHOICES)

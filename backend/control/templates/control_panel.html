@@ -2,38 +2,67 @@
 
 {% block content %}
 <div class="w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md">
-    <div class="flex flex-col gap-4 text-center">
-        <h1 class="font-semibold">Bem-vindo ao Painel de Controle</h1>
+    <!-- Guia de uso do painel -->
+    <div class="flex flex-col items-center gap-4 text-center">
+        <h1 class="font-semibold mt-2">Bem-vindo ao Painel de Controle</h1>
 
-        <p>Gerenciamento do site principal, para <b>criação</b>, <b>edição</b> e <b>exclusão</b> de dados</p>
+        <p>Leia com atenção para entender como cada componente do sistema funciona.</p>
+        
+        <!-- Sumariio -->
+        <div class="w-xs bg-zinc-800 rounded-md shadow-md p-2">
+            <ul class="text-blue-400">
+                <li><a href="#users">Usuários</a></li>
+                <li><a href="#types">Tipos</a></li>
+                <li><a href="#categories">Categorias</a></li>
+                <li><a href="#gnres">Gêneros</a></li>
+                <li><a href="#films">Filmes</a></li>
+                <li><a href="#sessions">Sessões</a></li>
+            </ul>
+        </div>
 
-        <ul class="flex flex-col gap-6">
-            <li>
-                <a href="{% url 'users' %}" class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
-                    Usuários
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'films' %}" class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
-                    Filmes
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'categories' %}" class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
-                    Categorias
-                </a>
-            </li>
-        </ul>
+        <!-- Usuários -->
+        <section id="users" class="w-full flex flex-col gap-2 bg-zinc-800 rounded-md shadow-md p-2 text-justify">
+            <h1 class="font-semibold text-center text-yellow-400">Usuários</h1>
 
-        <hr class="border-gray-700">
+            <p>1. Para acessar o controle de usuários use o botão "Usuários" no cabeçalho do site.</p>
 
-        <p>Qualquer problema procure o suporte imediatamente.</p>
+            <p>2. Na página de controle de usuários você vai encontrar um formulário para adicionar novos usuários e abaixo dele uma lista dos usuários já inseridos no sistema.</p>
+        
+            <p>3. Na mesma lista existem botões de ações sendo elas "Editar" e "Deletar".</p>
 
-        <span class="text-sm text-gray-500">Versão: 1.0.0</span>
+            <p>4. O botão "Editar" leva para outra página onde as informações podem ser alteradas.</p>
 
-        <hr class="border-gray-700">
+            <p>5. O botão "Deletar" claramente apaga completamente as informações. Use com cuidado!</p>
 
-        <span class="text-sm text-gray-500">&copy; 2026 - Xzhyan, JhonathanDelgado16</span>
+            <p>6. Staff significa "Admininistrador", ou seja, o usuário com maior controle do sistema.</p>
+
+            <p>7. Status é o estado do acesso do usuário, se o usuário estiver ativo ele pode acessar o sistema e se estiver desativado ele não pode acessar.</p>
+        </section>
+
+        <!-- Tipos -->
+        <section id="types" class="w-full flex flex-col gap-2 bg-zinc-800 rounded-md shadow-md p-2">
+            <h1 class="font-semibold">Tipos</h1>
+        </section>
+
+        <!-- Categorias -->
+        <section id="categories" class="w-full flex flex-col gap-2 bg-zinc-800 rounded-md shadow-md p-2">
+            <h1 class="font-semibold">Categorias</h1>
+        </section>
+
+        <!-- Gêneros -->
+        <section id="gnres" class="w-full flex flex-col gap-2 bg-zinc-800 rounded-md shadow-md p-2">
+            <h1 class="font-semibold">Gêneros</h1>
+        </section>
+
+        <!-- Filmes -->
+        <section id="films" class="w-full flex flex-col gap-2 bg-zinc-800 rounded-md shadow-md p-2">
+            <h1 class="font-semibold">Filmes</h1>
+        </section>
+
+        <!-- Sessões -->
+        <section id="sessions" class="w-full flex flex-col gap-2 bg-zinc-800 rounded-md shadow-md p-2">
+            <h1 class="font-semibold">Sessões</h1>
+        </section>
     </div>
 </div>
 {% endblock %}

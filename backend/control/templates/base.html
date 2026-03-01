@@ -43,11 +43,6 @@
         
         {% if user.is_authenticated %}
         <nav class="text-center space-x-2">
-            <a href="{% url 'control-panel' %}"
-                class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
-                Ínicio
-            </a>
-
             <a href="{% url 'sessions' %}"
                 class="bg-zinc-900 hover:bg-zinc-700 cursor-pointer transition rounded-md font-semibold p-2 border-2 border-red-800">
                 Sessões

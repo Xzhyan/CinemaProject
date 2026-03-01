@@ -11,7 +11,6 @@ from .forms import UserLoginForm, AddUserForm, AddCategoryTypeForm, AddCategoryF
 # Models
 from api.models import CategoryType, Category, FilmGenre, FilmCard, Session
 
-
 # Modelo do usuário custom
 User = get_user_model()
 
@@ -337,6 +336,7 @@ def categories(request):
     return render(request, 'category/categories.html', context)
 
 
+@login_required(login_url='user-login')
 def catg_type_edit(request, id):
     c_type = get_object_or_404(CategoryType, id=id)
 
@@ -367,6 +367,7 @@ def catg_type_edit(request, id):
     return render(request, 'category/catg_type_edit.html', context)
 
 
+@login_required(login_url='user-login')
 def catg_type(request):
     if request.method == 'POST':
         form_type = request.POST.get('form_type')
@@ -470,6 +471,7 @@ def users(request):
 
     return render(request, 'user/users.html', context)
 
+
 def user_logout(request):
     logout(request)
     messages.info(request, "Você saiu do sistema!")
@@ -496,7 +498,7 @@ def user_login(request):
             else:
                 login(request, user)
                 messages.success(request, "Usuário logado com sucesso!")
-                return redirect('control-panel')
+                return redirect('sessions')
         
         else:
             for field, errors in form.errors.items():

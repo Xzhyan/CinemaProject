@@ -9,13 +9,13 @@
         <form method="POST" class="flex flex-col gap-2 text-gray-500">
             {% csrf_token %}
             
-            <div class="flex flex-row gap-4">
+            <div class="flex flex-row justify-center gap-4">
                 {{ form.name }}
 
                 {{ form.room }}
             </div>
             
-            <div class="flex flex-row gap-4">
+            <div class="flex flex-row justify-center gap-4">
                 {{ form.week_day }}
 
                 {{ form.time }}
@@ -71,6 +71,7 @@
                 <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
                     <th class="p-2">Nome da Sessão</th>
                     <th class="p-2">Filme</th>
+                    <th class="p-2">Sala</th>
                     <th class="p-2">Modificado em</th>
                     <th class="p-2">Por</th>
                     <th class="p-2">Ações</th>
@@ -81,6 +82,7 @@
                 <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
                     <td class="p-2">{{ session.name }}</td>
                     <td class="p-2">{{ session.film }}</td>
+                    <td class="p-2">{{ session.room }}</td>
                     <td class="p-2">{{ session.modified_at }}</td>
                     <td class="p-2">{{ session.modified_by }}</td>
                     <td class="p-2 flex flex-row justify-center items-center gap-2">
