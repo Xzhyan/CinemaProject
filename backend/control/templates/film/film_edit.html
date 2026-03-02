@@ -32,9 +32,9 @@
                 <hr>
 
                 <p>Gêneros do filme:</p>
-                <div class="w-xl flex flex-row flex-wrap gap-4">
+                <div class="grid grid-cols-3 gap-x-6 gap-y-2">
                     {% for checkbox in form.film_genre %}
-                        <label class="flex justify-center gap-2 cursor-pointer">
+                        <label class="flex items-center gap-2 cursor-pointer">
                             {{ checkbox.tag }}
                             <span>{{ checkbox.choice_label }}</span>
                         </label>
