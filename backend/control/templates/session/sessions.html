@@ -18,6 +18,8 @@
             <div class="flex flex-row justify-center gap-4">
                 {{ form.week_day }}
 
+                {{ form.date }}
+
                 {{ form.time }}
             </div>
 
@@ -72,6 +74,7 @@
                     <th class="p-2">Nome da Sessão</th>
                     <th class="p-2">Filme</th>
                     <th class="p-2">Sala</th>
+                    <th class="p-2">Data</th>
                     <th class="p-2">Modificado em</th>
                     <th class="p-2">Por</th>
                     <th class="p-2">Ações</th>
@@ -83,6 +86,7 @@
                     <td class="p-2">{{ session.name }}</td>
                     <td class="p-2">{{ session.film }}</td>
                     <td class="p-2">{{ session.room }}</td>
+                    <td class="p-2">{{ session.date }}</td>
                     <td class="p-2">{{ session.modified_at }}</td>
                     <td class="p-2">{{ session.modified_by }}</td>
                     <td class="p-2 flex flex-row justify-center items-center gap-2">

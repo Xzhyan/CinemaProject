@@ -80,6 +80,7 @@ class Session(models.Model):
     time = models.TimeField()
     categories = models.ManyToManyField(Category, related_name='session_catg')
     week_day = models.CharField(max_length=50, choices=WEEK_CHOICES)
+    date = models.DateField()
     room = models.CharField(max_length=100)
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='modified_sessions')
     modified_at = models.DateTimeField(auto_now_add=True)

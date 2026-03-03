@@ -5,7 +5,7 @@ function MainLayout() {
   return (
     <>
       <Header />
-      <main>
+      <main className="flex flex-col items-center">
         <Outlet />
       </main>
     </>

@@ -16,18 +16,22 @@ class AddSessionForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ['name', 'film', 'time', 'week_day', 'room']
+        fields = ['name', 'film', 'time', 'week_day', 'date', 'room']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-70 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Nome da sessão... ex: Sessão 01"
             }),
             'time': forms.TimeInput(attrs={
-                'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'class': "w-30 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Horário, ex: 19:00"
             }),
             'week_day': forms.Select(attrs={
                 'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
+            }),
+            'date': forms.DateInput(attrs={
+                'class': "w-40 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Data: 01/01/2001"
             }),
             'room': forms.TextInput(attrs={
                 'class': "w-70 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
