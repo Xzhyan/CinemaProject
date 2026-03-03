@@ -130,6 +130,20 @@ AUTH_USER_MODEL = 'control.CustomUser'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+# Para produção
+# CORS_ALLOWED_ORIGINS = [
+#     "https://seusite.com",
+# ]
+
 # Armazenamento de arquivos
 MEDIA_URL = '/archives/'
 MEDIA_ROOT = join(BASE_DIR, 'archives')
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '1000/day',
+    }
+}
