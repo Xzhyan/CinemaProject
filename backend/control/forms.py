@@ -16,7 +16,7 @@ class AddSessionForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ['name', 'film', 'time', 'week_day', 'date', 'room']
+        fields = ['name', 'film', 'time', 'week_day', 'date', 'room', 'ticket_url']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-70 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
@@ -36,6 +36,10 @@ class AddSessionForm(forms.ModelForm):
             'room': forms.TextInput(attrs={
                 'class': "w-70 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Sala do filme... ex: Sala 01"
+            }),
+            'ticket_url': forms.URLInput(attrs={
+                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Link de compra de ingressos"
             })
         }
 
@@ -82,7 +86,7 @@ class AddGenreForm(forms.ModelForm):
 class AddFilmCardForm(forms.ModelForm):
     class Meta:
         model = FilmCard
-        fields = ['name', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'display', 'thumb_image', 'ticket_url']
+        fields = ['name', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'display', 'thumb_image']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-full max-w-68 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
@@ -114,10 +118,6 @@ class AddFilmCardForm(forms.ModelForm):
             }),
             'thumb_image': forms.FileInput(attrs={
                 'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
-            }),
-            'ticket_url': forms.URLInput(attrs={
-                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Link de compra de ingressos"
             })
         }
 

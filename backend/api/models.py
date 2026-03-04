@@ -56,7 +56,6 @@ class FilmCard(models.Model):
     age_rating = models.CharField(choices=AGE_CHOICES, default='livre')
     display = models.CharField(choices=DISPLAY_CHOICES, default='on_display')
     thumb_image = models.FileField(upload_to='thumbs/')
-    ticket_url = models.URLField()
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mod_films')
     modified_at = models.DateTimeField(auto_now_add=True)
 
@@ -82,6 +81,7 @@ class Session(models.Model):
     week_day = models.CharField(max_length=50, choices=WEEK_CHOICES)
     date = models.DateField()
     room = models.CharField(max_length=100)
+    ticket_url = models.URLField()
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='modified_sessions')
     modified_at = models.DateTimeField(auto_now_add=True)
 
