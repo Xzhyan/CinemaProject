@@ -31,7 +31,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div>
+    <div className="grid grid-cols-2">
       <div className="flex flex-col w-lg bg-zinc-900 p-2">
         <h1>Card de Filme</h1>
 
@@ -63,9 +63,7 @@ function HomePage() {
 
             <img src={`http://localhost:8000${film.thumb_image}`} alt="" />
 
-            <p>{film.thumb_image}</p>
-
-            <p>Compra: {film.ticket_url}</p>
+            <img src={`http://localhost:8000${film.banner_image}`} alt="" />
           </div>
         ))}
       </div>
@@ -99,6 +97,8 @@ function HomePage() {
             <p>{session.date}</p>
 
             <p>{session.room}</p>
+
+            <p>Compra: {session.ticket_url}</p>
           </div>
         ))}
       </div>

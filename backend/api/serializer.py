@@ -25,7 +25,7 @@ class FilmCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FilmCard
-        fields = ['id', 'name', 'display_label', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'thumb_image', 'ticket_url']
+        fields = ['id', 'name', 'display_label', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'thumb_image', 'banner_image']
 
 class SessionSerializer(serializers.ModelSerializer):
     catg_grouped = serializers.SerializerMethodField()
@@ -37,7 +37,7 @@ class SessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Session
-        fields = ['id', 'name', 'film', 'catg_grouped', 'week_day', 'date', 'room']
+        fields = ['id', 'name', 'film', 'catg_grouped', 'week_day', 'date', 'room', 'ticket_url']
 
     def get_catg_grouped(self, obj):
         grouped = defaultdict(list)

@@ -189,7 +189,9 @@ def film_edit(request, id):
     film = get_object_or_404(FilmCard, id=id)
 
     if request.method == 'POST':
-        old_thumb_img = film.thumb_image # Imagem antiga do filme
+        old_thumb_img = film.thumb_image # Imagem antiga do poster
+        old_banner_img = film.banner_image # Imagem antiga do banner
+
         form = AddFilmCardForm(request.POST, request.FILES, instance=film)
 
         if form.is_valid():
@@ -202,6 +204,10 @@ def film_edit(request, id):
             # Apaga a imagem antiga, se for alterada
             if 'thumb_image' in request.FILES and old_thumb_img:
                 old_thumb_img.delete(save=False)
+
+            # Apaga a imagem antiga, se for alterada
+            if 'banner_image' in request.FILES and old_banner_img:
+                old_banner_img.delete(save=False)
 
             messages.success(request, "Filme atualizado com sucesso!")
             return redirect('films')

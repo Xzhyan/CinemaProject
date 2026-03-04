@@ -86,7 +86,7 @@ class AddGenreForm(forms.ModelForm):
 class AddFilmCardForm(forms.ModelForm):
     class Meta:
         model = FilmCard
-        fields = ['name', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'display', 'thumb_image']
+        fields = ['name', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'display', 'thumb_image', 'banner_image']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-full max-w-68 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
@@ -117,6 +117,9 @@ class AddFilmCardForm(forms.ModelForm):
                 'class': "bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
             'thumb_image': forms.FileInput(attrs={
+                'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
+            }),
+            'banner_image': forms.FileInput(attrs={
                 'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             })
         }

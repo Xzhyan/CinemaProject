@@ -56,6 +56,7 @@ class FilmCard(models.Model):
     age_rating = models.CharField(choices=AGE_CHOICES, default='livre')
     display = models.CharField(choices=DISPLAY_CHOICES, default='on_display')
     thumb_image = models.FileField(upload_to='thumbs/')
+    banner_image = models.FileField(upload_to='banners/')
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mod_films')
     modified_at = models.DateTimeField(auto_now_add=True)
 
