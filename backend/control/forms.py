@@ -23,6 +23,7 @@ class AddSessionForm(forms.ModelForm):
                 'placeholder': "Nome da sessão... ex: Sessão 01"
             }),
             'time': forms.TimeInput(attrs={
+                'type': 'time',
                 'class': "w-30 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Horário, ex: 19:00"
             }),
@@ -30,6 +31,7 @@ class AddSessionForm(forms.ModelForm):
                 'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
             'date': forms.DateInput(attrs={
+                'type': 'date',
                 'class': "w-40 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Data: 01/01/2001"
             }),
