@@ -36,6 +36,16 @@ class AddSessionForm(forms.ModelForm):
         empty_label=None
     )
 
+    date = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'type': "date",
+            'class': "w-40 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
+        },
+            format='%Y-%m-%d'
+        ),
+        input_formats=['%Y-%m-%d']
+    )
+
     class Meta:
         model = Session
         fields = ['name', 'film', 'time', 'week_day', 'city', 'date', 'room', 'ticket_url']
@@ -55,11 +65,11 @@ class AddSessionForm(forms.ModelForm):
             'city': forms.Select(attrs={
                 'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
-            'date': forms.DateInput(attrs={
-                'type': 'date',
-                'class': "w-40 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
-                'placeholder': "Data: 01/01/2001"
-            }),
+            # 'date': forms.DateInput(attrs={
+            #     'type': 'date',
+            #     'class': "w-40 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+            #     'placeholder': "Data: 01/01/2001"
+            # }),
             'room': forms.TextInput(attrs={
                 'class': "w-70 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
                 'placeholder': "Sala do filme... ex: Sala 01"

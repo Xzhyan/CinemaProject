@@ -5,7 +5,7 @@ User = get_user_model()
 
 
 class CategoryType(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mod_types')
     modified_at = models.DateTimeField(auto_now_add=True)
 

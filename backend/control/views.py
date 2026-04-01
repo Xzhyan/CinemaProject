@@ -74,7 +74,7 @@ def promotions(request):
                         messages.error(request, error)
 
         if form_type == 'delete_form':
-            promo_id = request.POST.get('promotion_id')
+            promo_id = request.POST.get('promo_id')
 
             promo = get_object_or_404(Promotion, id=promo_id)
             promo.promo_image.delete(save=False)
@@ -459,7 +459,7 @@ def catg_type(request):
         if form_type == 'add_form':
             form = AddCategoryTypeForm(request.POST)
 
-            if form.is_valid:
+            if form.is_valid():
                 c_type = form.save(commit=False)
                 c_type.modified_by = request.user
                 c_type.save()
@@ -478,10 +478,8 @@ def catg_type(request):
             messages.success(request, "Tipo de categoria deletada com sucesso!")
             return redirect('catg-types')
 
-    else:
-        form = AddCategoryTypeForm()
-        c_types = CategoryType.objects.all()
-
+    form = AddCategoryTypeForm()
+    c_types = CategoryType.objects.all()
 
     context = {
         'form': form,

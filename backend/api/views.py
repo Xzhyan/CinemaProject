@@ -1,11 +1,18 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Category, Session, FilmCard
-from .serializer import FilmCardSerializer, SessionSerializer
+from .models import Category, Session, FilmCard, Promotion
+from .serializer import FilmCardSerializer, SessionSerializer, PromotionSerializer
 
 
-# View que alimenta o front com os filmes do banco de dados
+@api_view(['GET'])
+def promotions(request):
+    promotions = Promotion.objects.all()
+    serializer = PromotionSerializer(promotions, many=True)
+
+    return Response({'promotions': serializer.data})
+
+
 @api_view(['GET'])
 def films(request):
     films = FilmCard.objects.all()

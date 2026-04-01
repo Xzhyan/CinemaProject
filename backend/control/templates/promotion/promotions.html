@@ -70,7 +70,7 @@
                     {% for promo in promotions %}
                     <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
                         <td class="p-2">{{ promo.title }}</td>
-                        <td class="p-2">{{ promo.desc }}</td>
+                        <td class="p-2">{{ promo.desc|truncatechars:50 }}</td>
                         <td class="p-2">{{ promo.modified_at }}</td>
                         <td class="p-2">{{ promo.modified_by }}</td>
                         <td class="p-2 flex flex-row justify-center items-center gap-2">
