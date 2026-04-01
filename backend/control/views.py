@@ -6,13 +6,91 @@ from django.utils import timezone
 from collections import defaultdict
 
 # Forms
-from .forms import UserLoginForm, AddUserForm, AddCategoryTypeForm, AddCategoryForm, AddGenreForm, AddFilmCardForm, AddSessionForm
+from .forms import UserLoginForm, AddUserForm, AddCategoryTypeForm, AddCategoryForm, AddGenreForm, AddFilmCardForm, AddSessionForm, AddPromotionForm
 
 # Models
-from api.models import CategoryType, Category, FilmGenre, FilmCard, Session
+from api.models import CategoryType, Category, FilmGenre, FilmCard, Session, Promotion
 
 # Modelo do usuário custom
 User = get_user_model()
+
+
+@login_required(login_url='user-login')
+def promotion_edit(request, id):
+    promo = get_object_or_404(Promotion, id=id)
+    form = AddPromotionForm(instance=promo)
+
+    if request.method == 'POST':
+        old_promo_image = promo.promo_image # imagem antiga
+
+        form = AddPromotionForm(request.POST, request.FILES, instance=promo)
+
+        if form.is_valid():
+            promo = form.save(commit=False)
+            promo.modified_by = request.user
+            promo.modified_at = timezone.now()
+            promo.save()
+
+            # Apaga a imagem antiga, se for alterada
+            if 'promo_image' in request.FILES and old_promo_image:
+                old_promo_image.delete(save=False)
+
+            messages.success(request, "Promoção alterada com sucesso!")
+            return redirect('promotions')
+
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
+
+    context = {
+        'form': form,
+        'promo': promo
+    }
+
+    return render(request, 'promotion/promotion_edit.html', context)
+
+
+@login_required(login_url='user-login')
+def promotions(request):
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'add_form':
+            form = AddPromotionForm(request.POST, request.FILES)
+
+            if form.is_valid():
+                promo = form.save(commit=False)
+                promo.modified_by = request.user
+                promo.modified_at = timezone.now()
+                promo.save()
+
+                messages.success(request, "Nova promoção adicionada com sucesso!")
+                return redirect('promotions')
+            
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
+
+        if form_type == 'delete_form':
+            promo_id = request.POST.get('promotion_id')
+
+            promo = get_object_or_404(Promotion, id=promo_id)
+            promo.promo_image.delete(save=False)
+            promo.delete()
+            messages.success(request, "Promoção deletada com sucesso!")
+
+    form = AddPromotionForm()
+
+    promotions = Promotion.objects.all()
+
+    context = {
+        'form': form,
+        'promotions': promotions
+    }
+
+    return render(request, 'promotion/promotions.html', context)
 
 
 @login_required(login_url='user-login')

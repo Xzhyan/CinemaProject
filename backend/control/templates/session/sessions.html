@@ -1,116 +1,133 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
+<div class="w-full max-w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
     <!-- Card para adicionar nova sessão -->
     <div class="bg-zinc-800 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
-        <h1 class="font-semibold">Adicionar nova Sessão</h1>
+        <button onclick="toggleAccordion('form_div')" class="w-full flex justify-between hover:bg-zinc-700 cursor-pointer p-2 rounded-sm shadow-md">
+            <span>
+                <h1 class="font-semibold">Adicionar nova Sessão</h1>
+            </span>
 
-        <form method="POST" class="flex flex-col gap-2 text-gray-500">
-            {% csrf_token %}
-            
-            <div class="flex flex-row justify-center gap-4">
-                {{ form.name }}
+            <!-- Icone do accordion -->
+            <svg id="icon-form_div" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                class="w-5 h-5 transition-transform duration-300 transform"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </button>
 
-                {{ form.room }}
-            </div>
-            
-            <div class="flex flex-row justify-center gap-4">
-                {{ form.week_day }}
+        <div id="form_div" class="hidden">
+            <form method="POST" class="flex flex-col gap-2 text-gray-500">
+                {% csrf_token %}
+                
+                <div class="flex flex-row justify-center gap-4">
+                    {{ form.name }}
 
-                {{ form.date }}
+                    {{ form.room }}
+                </div>
+                
+                <div class="flex flex-row justify-center gap-4">
+                    {{ form.week_day }}
 
-                {{ form.time }}
-            </div>
+                    {{ form.city }}
 
-            <hr>
+                    {{ form.date }}
 
-            <div class="flex gap-4">
-                {% for radio in form.film %}
-                    <label class="flex items-center gap-4 cursor-pointer">
-                        {{ radio.tag }}
-                        <span>{{ radio.choice_label }}</span>
-                    </label>
-                {% endfor %}
-            </div>
-
-            <hr>
-            
-            {% for type, cats in grouped_catgs.items %}
-                <div class="w-full">
-                    <h3 class="font-semibold">{{ type }}</h3>
-
-                    <div class="flex gap-2 flex-wrap">
-                        {% for cat in cats %}
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" name="categories" value="{{ cat.id }}">
-                                <span>{{ cat.name }}</span>
-                            </label>
-                        {% endfor %}
-                    </div>
+                    {{ form.time }}
                 </div>
 
                 <hr>
-            {% endfor %}
 
-            {{ form.ticket_url }}
+                <div class="grid grid-cols-4 gap-x-6 gap-y-2">
+                    {% for radio in form.film %}
+                        <label class="flex items-center gap-4 cursor-pointer">
+                            {{ radio.tag }}
+                            <span>{{ radio.choice_label }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
 
-            <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
-                Salvar
-            </button>
-        </form>
-    </div>
+                <hr>
+                
+                {% for type, cats in grouped_catgs.items %}
+                    <div class="w-full">
+                        <h3 class="font-semibold">{{ type }}</h3>
 
-    <!-- Pesquisa do sistema -->
-    <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
-        <input id="search-files" type="search" placeholder="Procurar sessão..." class="w-full max-w-md bg-zinc-800 hover:bg-zinc-600 transition rounded-sm p-2 shadow-md">
-    </div>
+                        <div class="grid grid-cols-4 gap-x-6 gap-y-2">
+                            {% for cat in cats %}
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" name="categories" value="{{ cat.id }}">
+                                    <span>{{ cat.name }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
 
-    <!-- Lista de sessões -->
-    <div class="bg-zinc-700 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
-        <h1 class="font-semibold">Lista de sessões adicionadas</h1>
-
-        <table class="w-full text-center">
-            <thead>
-                <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
-                    <th class="p-2">Nome da Sessão</th>
-                    <th class="p-2">Filme</th>
-                    <th class="p-2">Sala</th>
-                    <th class="p-2">Data</th>
-                    <th class="p-2">Modificado em</th>
-                    <th class="p-2">Por</th>
-                    <th class="p-2">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for session in sessions %}
-                <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
-                    <td class="p-2">{{ session.name }}</td>
-                    <td class="p-2">{{ session.film }}</td>
-                    <td class="p-2">{{ session.room }}</td>
-                    <td class="p-2">{{ session.date }}</td>
-                    <td class="p-2">{{ session.modified_at }}</td>
-                    <td class="p-2">{{ session.modified_by }}</td>
-                    <td class="p-2 flex flex-row justify-center items-center gap-2">
-                        <!-- Link para a página de editar sessão -->
-                        <a href="{% url 'session-edit' session.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
-                            Editar
-                        </a>
-
-                        <!-- Form pra deletar filme -->
-                        <form method="POST">
-                        {% csrf_token %}
-                            <input type="number" class="hidden" name="session_id" value="{{ session.id }}">
-
-                            <button name="form_type" value="delete_form" class="bg-red-800 hover:bg-red-600 p-2 rounded-sm cursor-pointer transition font-semibold">
-                                Deletar
-                            </button>
-                        </form>
-                    </td>
-                </tr>
+                    <hr>
                 {% endfor %}
-            </tbody>
-        </table>
+
+                {{ form.ticket_url }}
+
+                <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
+                    Salvar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="list_div">
+        <!-- Pesquisa do sistema -->
+        <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
+            <input id="search-files" type="search" placeholder="Procurar sessão..." class="w-full max-w-md bg-zinc-800 hover:bg-zinc-600 transition rounded-sm p-2 shadow-md">
+        </div>
+
+        <!-- Lista de sessões -->
+        <div class="bg-zinc-700 flex flex-col mt-2 gap-2 text-center items-center rounded-sm p-2 shadow-md">
+            <h1 class="font-semibold">Lista de sessões adicionadas</h1>
+
+            <table class="w-full text-center">
+                <thead>
+                    <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
+                        <th class="p-2">Nome da Sessão</th>
+                        <th class="p-2">Filme</th>
+                        <th class="p-2">Sala</th>
+                        <th class="p-2">Data</th>
+                        <th class="p-2">Modificado em</th>
+                        <th class="p-2">Por</th>
+                        <th class="p-2">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in sessions %}
+                    <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
+                        <td class="p-2">{{ session.name }}</td>
+                        <td class="p-2">{{ session.film }}</td>
+                        <td class="p-2">{{ session.room }}</td>
+                        <td class="p-2">{{ session.date }}</td>
+                        <td class="p-2">{{ session.modified_at }}</td>
+                        <td class="p-2">{{ session.modified_by }}</td>
+                        <td class="p-2 flex flex-row justify-center items-center gap-2">
+                            <!-- Link para a página de editar sessão -->
+                            <a href="{% url 'session-edit' session.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                                Editar
+                            </a>
+
+                            <!-- Form pra deletar filme -->
+                            <form method="POST">
+                            {% csrf_token %}
+                                <input type="number" class="hidden" name="session_id" value="{{ session.id }}">
+
+                                <button name="form_type" value="delete_form" class="bg-red-800 hover:bg-red-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                                    Deletar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -55,6 +55,7 @@ class FilmCard(models.Model):
     movie_cast = models.TextField()
     age_rating = models.CharField(choices=AGE_CHOICES, default='livre')
     display = models.CharField(choices=DISPLAY_CHOICES, default='on_display')
+    on_carousel = models.BooleanField(default=False)
     thumb_image = models.FileField(upload_to='thumbs/')
     banner_image = models.FileField(upload_to='banners/')
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mod_films')
@@ -66,6 +67,7 @@ class FilmCard(models.Model):
 
 class Session(models.Model):
     WEEK_CHOICES = [
+        ('', "dia da semana"),
         ('monday', "Segunda"),
         ('tuesday', "Terça"),
         ('wednesday', "Quarta"),
@@ -75,15 +77,34 @@ class Session(models.Model):
         ('sunday', "Domingo")
     ]
 
+    CITY_CHOICES = [
+        ('', "cidade"),
+        ('gp', "Guarapuava"),
+        ('ap', "Apucarana")
+    ]
+
     name = models.CharField(max_length=100, unique=True)
     film = models.ForeignKey(FilmCard, on_delete=models.CASCADE, related_name='session')
     time = models.TimeField()
     categories = models.ManyToManyField(Category, related_name='session_catg')
     week_day = models.CharField(max_length=50, choices=WEEK_CHOICES)
+    city = models.CharField(max_length=20, choices=CITY_CHOICES)
     date = models.DateField()
     room = models.CharField(max_length=100)
     ticket_url = models.URLField()
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='modified_sessions')
+    modified_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Promotion(models.Model):
+    title = models.CharField(max_length=100)
+    desc = models.TextField()
+    promo_image = models.FileField(upload_to='promotions/')
+    on_carousel = models.BooleanField(default=False)
+    modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='modified_promotions')
     modified_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

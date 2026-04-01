@@ -2,11 +2,11 @@
 
 {% block content %}
 <div class="w-full max-w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
-    <!-- Card para adicionar novo Filme -->
+    <!-- Card para adicionar nova promoção -->
     <div class="bg-zinc-800 flex flex-col gap-2 text-center items-center rounded-sm p-2 shadow-md">
         <button onclick="toggleAccordion('form_div')" class="w-full flex justify-between hover:bg-zinc-700 cursor-pointer p-2 rounded-sm shadow-md">
             <span>
-                <h1 class="font-semibold">Adicionar novo Filme</h1>
+                <h1 class="font-semibold">Adicionar nova Promoção</h1>
             </span>
 
             <!-- Icone do accordion -->
@@ -21,55 +21,22 @@
             <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-2 text-gray-500">
                 {% csrf_token %}
                 
-                <div class="flex flex-row justify-center gap-4">
-                    {{ form.name }}
-                    
-                    <span>Duração em minutos: {{ form.duration }}</span>
-                </div>
+                {{ form.title }}
 
-                {{ form.description }}
-
-                {{ form.director }}
-
-                {{ form.movie_cast }}
+                {{ form.desc }}
 
                 <hr>
-
-                <p>Gêneros do filme:</p>
-                <div class="grid grid-cols-3 gap-x-6 gap-y-2">
-                    {% for checkbox in form.film_genre %}
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            {{ checkbox.tag }}
-                            <span>{{ checkbox.choice_label }}</span>
-                        </label>
-                    {% endfor %}
-                </div>
-
-                <hr>
-
-                <div class="flex flex-row justify-center items-center gap-4">
-                    <span>Classificação Indicativa: {{ form.age_rating }}</span>
-
-                    <span>Visibilidade: {{ form.display }}</span>
+                
+                <div>
+                    <p>Imagem de propaganda da promoção</p>
+                    {{ form.promo_image }}
                 </div>
 
                 <hr>
 
                 <div class="flex gap-2">
-                    <p>Marque para o filme aparecer no carrosel</p>
+                    <p>Marque a para que a promoção apareça no carrosel</p>
                     {{ form.on_carousel }}
-                </div>
-
-                <hr>
-
-                <div class="flex flex-col justify-center">
-                    <p>Carregue a imagem de poster do filme abaixo:</p>
-                    {{ form.thumb_image }}
-                </div>
-
-                <div class="flex flex-col justify-center">
-                    <p>Carregue a imagem de banner do filme abaixo:</p>
-                    {{ form.banner_image }}
                 </div>
 
                 <button name="form_type" value="add_form" type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
@@ -82,40 +49,40 @@
     <div id="list_div">
         <!-- Pesquisa do sistema -->
         <div class="bg-zinc-700 flex flex-col gap-2 text-center rounded-sm p-2 shadow-md">
-            <input id="search-files" type="search" placeholder="Procurar filme..." class="w-full max-w-md bg-zinc-800 hover:bg-zinc-600 transition rounded-sm p-2 shadow-md">
+            <input id="search-files" type="search" placeholder="Procurar sessão..." class="w-full max-w-md bg-zinc-800 hover:bg-zinc-600 transition rounded-sm p-2 shadow-md">
         </div>
 
-        <!-- Lista de filmes -->
+        <!-- Lista de sessões -->
         <div class="bg-zinc-700 flex flex-col mt-2 gap-2 text-center items-center rounded-sm p-2 shadow-md">
-            <h1 class="font-semibold">Lista de filmes adicionados</h1>
+            <h1 class="font-semibold">Lista de promoções adicionadas</h1>
 
             <table class="w-full text-center">
                 <thead>
                     <tr class="bg-zinc-950 font-semibold text-sm text-gray-400">
-                        <th class="p-1">Nome do Filme</th>
-                        <th class="p-2">Visualização</th>
+                        <th class="p-2">Nome da Promoção</th>
+                        <th class="p-2">Descrição</th>
                         <th class="p-2">Modificado em</th>
                         <th class="p-2">Por</th>
                         <th class="p-2">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for film in films %}
+                    {% for promo in promotions %}
                     <tr class="bg-zinc-900 hover:bg-zinc-800 transition cursor-pointer">
-                        <td class="p-2">{{ film.name }}</td>
-                        <td class="p-2">{{ film.get_display_display  }}</td>
-                        <td class="p-2">{{ film.modified_at }}</td>
-                        <td class="p-2">{{ film.modified_by }}</td>
+                        <td class="p-2">{{ promo.title }}</td>
+                        <td class="p-2">{{ promo.desc }}</td>
+                        <td class="p-2">{{ promo.modified_at }}</td>
+                        <td class="p-2">{{ promo.modified_by }}</td>
                         <td class="p-2 flex flex-row justify-center items-center gap-2">
-                            <!-- Link para a página de editar filme -->
-                            <a href="{% url 'film-edit' film.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
+                            <!-- Link para a página de editar sessão -->
+                            <a href="{% url 'promotion-edit' promo.id %}" class="bg-green-800 hover:bg-green-600 p-2 rounded-sm cursor-pointer transition font-semibold">
                                 Editar
                             </a>
 
                             <!-- Form pra deletar filme -->
                             <form method="POST">
                             {% csrf_token %}
-                                <input type="number" class="hidden" name="film_id" value="{{ film.id }}">
+                                <input type="number" class="hidden" name="promo_id" value="{{ promo.id }}">
 
                                 <button name="form_type" value="delete_form" class="bg-red-800 hover:bg-red-600 p-2 rounded-sm cursor-pointer transition font-semibold">
                                     Deletar

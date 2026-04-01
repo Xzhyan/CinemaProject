@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w-4xl bg-zinc-900 mx-auto p-2 rounded-b-md space-y-2 shadow-md">
+    <div class="flex flex-col bg-zinc-800 rounded-sm p-2 shadow-md">
+        <a href="{% url 'promotions' %}" class="w-20 text-center bg-blue-800 hover:bg-blue-600 transition font-semibold rounded-sm p-2 shadow-md">
+            Voltar
+        </a>
+
+        <!-- Card para editar Promoção -->
+        <div class="flex flex-col gap-2 text-center items-center">
+            <h1 class="font-normal">
+                Editar a promoção:
+                <span class="font-semibold">{{ promo.name }}</span>
+            </h1>
+
+            <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-2 text-gray-500">
+                {% csrf_token %}
+
+                {{ form.title }}
+
+                {{ form.desc }}
+
+                <hr>
+                
+                <div>
+                    <p>Imagem de propaganda da promoção</p>
+                    {{ form.promo_image }}
+                </div>
+
+                <hr>
+
+                <div class="flex gap-2">
+                    <p>Marque a para que a promoção apareça no carrosel</p>
+                    {{ form.on_carousel }}
+                </div>
+
+                <button type="submit" class="w-40 mx-auto bg-green-800 hover:bg-green-600 p-2 rounded-sm text-white font-semibold cursor-pointer transition shadow-md">
+                    Salvar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

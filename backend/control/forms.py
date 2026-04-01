@@ -1,8 +1,30 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from api.models import CategoryType, Category, FilmGenre, FilmCard, Session
+from api.models import CategoryType, Category, FilmGenre, FilmCard, Session, Promotion
 
 User = get_user_model()
+
+
+class AddPromotionForm(forms.ModelForm):
+    class Meta:
+        model = Promotion
+        fields = ['title', 'desc', 'promo_image', 'on_carousel']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': "bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Titulo da promoção"
+            }),
+            'desc': forms.Textarea(attrs={
+                'class': "w-xl h-[100px] bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
+                'placeholder': "Descrição e informações sobre a promoção..."
+            }),
+            'promo_image': forms.FileInput(attrs={
+                'class': "bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
+            }),
+            'on_carousel': forms.CheckboxInput(attrs={
+                'class': "cursor-pointer scale-130"
+            })
+        }
 
 
 class AddSessionForm(forms.ModelForm):
@@ -16,7 +38,7 @@ class AddSessionForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ['name', 'film', 'time', 'week_day', 'date', 'room', 'ticket_url']
+        fields = ['name', 'film', 'time', 'week_day', 'city', 'date', 'room', 'ticket_url']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-70 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
@@ -28,6 +50,9 @@ class AddSessionForm(forms.ModelForm):
                 'placeholder': "Horário, ex: 19:00"
             }),
             'week_day': forms.Select(attrs={
+                'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
+            }),
+            'city': forms.Select(attrs={
                 'class': "w-50 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
             }),
             'date': forms.DateInput(attrs={
@@ -88,7 +113,7 @@ class AddGenreForm(forms.ModelForm):
 class AddFilmCardForm(forms.ModelForm):
     class Meta:
         model = FilmCard
-        fields = ['name', 'film_genre', 'description', 'duration', 'director', 'movie_cast', 'age_rating', 'display', 'thumb_image', 'banner_image']
+        fields = ['name', 'film_genre', 'description', 'duration', 'director', 'on_carousel', 'movie_cast', 'age_rating', 'display', 'thumb_image', 'banner_image']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': "w-full max-w-68 bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md",
@@ -117,6 +142,9 @@ class AddFilmCardForm(forms.ModelForm):
             }),
             'display': forms.Select(attrs={
                 'class': "bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"
+            }),
+            'on_carousel': forms.CheckboxInput(attrs={
+                'class': "cursor-pointer scale-130"
             }),
             'thumb_image': forms.FileInput(attrs={
                 'class': "w-full bg-zinc-900 hover:bg-zinc-700 transition outline-none p-2 rounded-sm shadow-md"

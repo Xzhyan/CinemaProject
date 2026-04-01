@@ -27,5 +27,9 @@ urlpatterns = [
 
     # Sessões
     path('sessions/', views.sessions, name='sessions'),
-    path('sessions/edit/<int:id>', views.session_edit, name='session-edit')
+    path('sessions/edit/<int:id>', views.session_edit, name='session-edit'),
+
+    # Promoções
+    path('promotions/', views.promotions, name='promotions'),
+    path('promotions/edit/<int:id>', views.promotion_edit, name='promotion-edit')
 ]

@@ -49,6 +49,15 @@
                     <span>Visibilidade: {{ form.display }}</span>
                 </div>
 
+                <hr>
+
+                <div class="flex gap-2">
+                    <p>Marque para o filme aparecer no carrosel</p>
+                    {{ form.on_carousel }}
+                </div>
+
+                <hr>
+
                 <div class="flex flex-col justify-center">
                     <p>Carregue a imagem de capa do filme abaixo:</p>
                     {{ form.thumb_image }}
