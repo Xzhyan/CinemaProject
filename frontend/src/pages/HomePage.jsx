@@ -53,6 +53,8 @@ function HomePage() {
             <p>Classificação Indicativa: {film.age_rating}</p>
 
             <p>Visibilidade: {film.display_label}</p>
+
+            <p>Carrosel: {film.on_carousel ? "Sim" : "Não"}</p>
             
             <div className="flex gap-2">
               <p>Gêneros: </p>
