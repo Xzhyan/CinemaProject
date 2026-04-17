@@ -14,11 +14,9 @@
 6. [Configuração](#configuracao)
 7. [Uso](#uso)
 8. [Estrutura do Projeto](#estrutura-do-projeto)
-<!-- 9. [Exemplo de Uso](#exemplo-de-uso) -->
-10. [Contribuição](#contribuicao)
-11. [Créditos](#creditos)
-12. [Licença](#licença)
-13. [Outros](#outros)
+9. [Créditos](#creditos)
+10. [Licença](#licença)
+11. [Algumas telas/imagens do sistema](#algumas-telas/imagens-do-sistema)
 
 ---
 
@@ -73,11 +71,38 @@ Da mesma forma o uso do sistemas vai ser mentorado por mim para o comprador do s
 
 ## Estrutura do Projeto
 
+Se tratando de um projeto em Django, ele é dividido em apps, sendo eles:
 
+- core: estrutura principal padrão do Django;
+- api: envia as informações do banco de dados para o frontend;
+- control: onde estão os templates do painel, views, rotas, forms e models, sendo responsável por todo o processo de controle do sistema.
 
-<!-- ## Exemplo de Uso -->
+---
 
-## Contribuição
 ## Créditos
+
+### Desenvolvido por [Xzhyan](https://github.com/Xzhyan)
+
+---
+
 ## Licença
-## Outros
+
+Este código pode ser utilizado para fins educacionais. A reprodução, modificação ou utilização para fins comerciais é estritamente proibida sem a autorização prévia e expressa do proprietário, [Xzhyan](https://github.com/Xzhyan).
+
+---
+
+## Algumas telas/imagens do sistema.
+
+![img01](imgs/img01.png)
+![img02](imgs/img02.png)
+![img03](imgs/img03.png)
+![img04](imgs/img04.png)
+![img05](imgs/img05.png)
+![img06](imgs/img06.png)
+![img07](imgs/img07.png)
+![img08](imgs/img08.png)
+![img09](imgs/img09.png)
+![img10](imgs/img10.png)
+![img11](imgs/img11.png)
+![img12](imgs/img12.png)
+
